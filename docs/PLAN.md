@@ -670,15 +670,15 @@ Orden crítico: F0 → F1 → (F2 ‖ F3) → (F4 ‖ F5) → F6 → F7 → F8 �
 - [x] 8. `scripts/verify-universal.sh` y comprobar que devuelve `x86_64 arm64`.
 
 ### F1 – Núcleo y catálogo
-- [ ] 9. `Settings` (Codable, versionado, incluye `snippets`) + `SettingsMigrationTests`.
-- [ ] 10. `SettingsStore` (UserDefaults, publicación de cambios con Combine u Observation).
-- [ ] 11. `FeatureDescriptor`, `Permission`, `FeatureKind` y `FeatureCatalog` (orden de §0).
-- [ ] 12. Protocolo `Feature` (`start`/`stop` idempotentes) + `FeatureRegistry` (gating de permisos, persistencia de `enabled`, `stopAll` en terminate) + tests.
-- [ ] 13. `MenuBuilder` generado desde el catálogo: checks, submenús, separador, Help, Preferences…, Launch at Login, Quit.
-- [ ] 14. `Localizable.xcstrings` con `en` como idioma base; todas las strings vía `String(localized:)`.
-- [ ] 15. `LoginItemService` (`SMAppService.mainApp`).
-- [ ] 16. Ventana de Help v0 (SwiftUI) con la versión y la arquitectura en ejecución.
-- [ ] 17. Restaurar el estado de las features al arrancar (las que no necesitan permisos primero).
+- [x] 9. `Settings` (Codable, versionado, incluye `snippets`) + `SettingsMigrationTests`.
+- [x] 10. `SettingsStore` (UserDefaults, publicación de cambios con Combine u Observation).
+- [x] 11. `FeatureDescriptor`, `Permission`, `FeatureKind` y `FeatureCatalog` (orden de §0).
+- [x] 12. Protocolo `Feature` (`start`/`stop` idempotentes) + `FeatureRegistry` (gating de permisos, persistencia de `enabled`, `stopAll` en terminate) + tests.
+- [x] 13. `MenuBuilder` generado desde el catálogo: checks, submenús, separador, Help, Preferences…, Launch at Login, Quit.
+- [x] 14. `Localizable.xcstrings` con `en` como idioma base; todas las strings vía `String(localized:)`.
+- [x] 15. `LoginItemService` (`SMAppService.mainApp`).
+- [x] 16. Ventana de Help v0 (SwiftUI) con la versión y la arquitectura en ejecución.
+- [x] 17. Restaurar el estado de las features al arrancar (las que no necesitan permisos primero).
 
 ### F2 – Features sin permisos
 - [ ] 18. `KeepAwakeFeature` (IOPMAssertion, duraciones, liberar en `stop`) + CA-2.x.

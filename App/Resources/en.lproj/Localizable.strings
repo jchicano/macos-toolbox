@@ -1,2 +1,22 @@
 /* Localized: English (development region) */
 "Quit Toolbox" = "Quit Toolbox";
+"Breaks" = "Breaks";
+"Keep Awake" = "Keep Awake";
+"Vim Scroll" = "Vim Scroll";
+"Auto-close" = "Auto-close";
+"Snippets" = "Snippets";
+"Color Picker" = "Color Picker";
+"Help" = "Help";
+"Preferences…" = "Preferences…";
+"Preferences" = "Preferences";
+"Launch at Login" = "Launch at Login";
+"Toolbox Help" = "Toolbox Help";
+"Version" = "Version";
+"Accessibility" = "Accessibility";
+"Reminds you to take a break." = "Reminds you to take a break.";
+"Prevents display and sleep." = "Prevents display and sleep.";
+"Ctrl-D / Ctrl-U scroll half a page." = "Ctrl-D / Ctrl-U scroll half a page.";
+"Closes pairs and jumps out with Tab." = "Closes pairs and jumps out with Tab.";
+"Expands short triggers into text." = "Expands short triggers into text.";
+"Copies the color under the cursor." = "Copies the color under the cursor.";
+"Full preferences land in F7." = "Full preferences land in F7.";

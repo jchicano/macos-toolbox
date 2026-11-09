@@ -26,6 +26,7 @@ targets:
     sources:
       - path: App
         excludes:
+          - LoginItem
           - "**/*.md"
     info:
       path: Config/Info.plist
@@ -46,14 +47,54 @@ targets:
       configs:
         Debug:
           ENABLE_HARDENED_RUNTIME: NO
+          ONLY_ACTIVE_ARCH: YES
+          ENABLE_TESTABILITY: YES
         Release:
           ARCHS: arm64 x86_64
           ONLY_ACTIVE_ARCH: NO
     dependencies:
       - package: ToolboxCore
+      - target: ToolboxLoginItem
+        embed: false
+    postBuildScripts:
+      - name: Embed LoginItem helper
+        script: |
+          HELPER="${CONFIGURATION_BUILD_DIR}/ToolboxLoginItem.app"
+          DEST="${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/LoginItems/ToolboxLoginItem.app"
+          if [ -e "$HELPER" ]; then
+            mkdir -p "$(dirname "$DEST")"
+            rm -rf "$DEST"
+            # -L: archive builds expose the helper as a symlink; dereference it.
+            cp -RL "$HELPER" "$DEST"
+          fi
     scheme:
       testTargets:
         - ToolboxAppTests
+
+  ToolboxLoginItem:
+    type: application
+    platform: macOS
+    deploymentTarget: "12.0"
+    sources:
+      - path: App/LoginItem
+    info:
+      path: Config/ToolboxLoginItem-Info.plist
+    settings:
+      base:
+        PRODUCT_NAME: ToolboxLoginItem
+        PRODUCT_MODULE_NAME: ToolboxLoginItem
+        PRODUCT_BUNDLE_IDENTIFIER: com.jchicano.toolbox.loginitem
+        SWIFT_VERSION: "5.0"
+        MACOSX_DEPLOYMENT_TARGET: "12.0"
+        CODE_SIGN_IDENTITY: "-"
+        GENERATE_INFOPLIST_FILE: NO
+        ENABLE_HARDENED_RUNTIME: YES
+      configs:
+        Debug:
+          ONLY_ACTIVE_ARCH: YES
+        Release:
+          ARCHS: arm64 x86_64
+          ONLY_ACTIVE_ARCH: NO
 
   ToolboxAppTests:
     type: bundle.unit-test
@@ -63,6 +104,7 @@ targets:
       - path: Tests/ToolboxAppTests
     dependencies:
       - target: Toolbox
+      - package: ToolboxCore
     settings:
       base:
         PRODUCT_NAME: ToolboxAppTests
@@ -72,6 +114,10 @@ targets:
         MACOSX_DEPLOYMENT_TARGET: "12.0"
         CODE_SIGN_IDENTITY: "-"
         GENERATE_INFOPLIST_FILE: YES
+        BUNDLE_LOADER: $(TEST_HOST)
+      configs:
+        Debug:
+          ONLY_ACTIVE_ARCH: YES
 
 schemes:
   Toolbox:

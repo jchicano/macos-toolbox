@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Application delegate: owns the status item controller for the app lifetime.
+// Application delegate: builds the controller, restores state, stops on quit.
 
 import AppKit
 
@@ -12,7 +12,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
-        // F1+: stop every running feature here (energy assertions, event taps).
+        statusItemController?.shutdown()
         statusItemController = nil
     }
 
