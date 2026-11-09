@@ -54,8 +54,9 @@ enum MenuBuilder {
         let menu = NSMenu()
 
         for descriptor in FeatureCatalog.all {
-            let title = NSLocalizedString(descriptor.titleKey, comment: "")
-            let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+            let feature = registry.feature(for: descriptor.id)
+            let fallback = NSLocalizedString(descriptor.titleKey, comment: "")
+            let item = NSMenuItem(title: feature?.menuTitle ?? fallback, action: nil, keyEquivalent: "")
             item.representedObject = descriptor.id.rawValue
             switch descriptor.kind {
             case .toggle:

@@ -38,12 +38,13 @@ final class StatusItemController {
         let keepAwake = KeepAwakeFeature(store: store)
         let breaks = BreaksFeature(store: store)
         let scrollVim = ScrollVimFeature(store: store, tapManager: tapManager, tracker: tracker, focusCache: focusCache)
+        let autoClose = AutoCloseFeature(store: store, tapManager: tapManager, tracker: tracker, focusCache: focusCache)
         let registry = registry ?? FeatureRegistry(
             features: [
                 breaks,
                 keepAwake,
                 scrollVim,
-                StubFeature.makeStub(for: .autoClose),
+                autoClose,
                 StubFeature.makeStub(for: .snippets),
                 ColorPickerAction(store: store),
             ],

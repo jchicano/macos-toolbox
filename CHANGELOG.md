@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- F5 Auto-close: `AutoCloseEngine` core (insert/tab-out/overtype/pair-backspace,
+  smart quotes, Option-combo support for Spanish brackets, navigation/mouse/
+  focus-change/timeout invalidation) with 30 unit tests (CA-4.11), plus
+  `RingBuffer`; `AutoCloseFeature` tap consumer (priority 20, Unicode-based,
+  denylist, editable-focus gate, dynamic `menuTitle` with active openers).
+  Verified live: dynamic title renders; CA-4.x behavior pending AX grant
+  (Spanish layout + latency in F9).
 - F4 Vim Scroll: `ScrollVimFeature` (Ctrl+D/U only, denylist + allowlist,
   Cocoa text-field skip, half-page from cached window frame with 400 pt
   fallback, virtual event location at window center) + `ScrollPoster` (pixel

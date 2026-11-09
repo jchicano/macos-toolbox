@@ -704,11 +704,11 @@ Orden crítico: F0 → F1 → (F2 ‖ F3) → (F4 ‖ F5) → F6 → F7 → F8 �
 - [x] 34. Verificar CA-3.1 a CA-3.6.
 
 ### F5 – Autocerrar
-- [ ] 35. `RingBuffer` y `PairTable` (pares por defecto de §6.4) en Core.
-- [ ] 36. `AutoCloseEngine` con TDD: ≥ 25 casos (insertar, anidar, tab-out, overtype, backspace de par, comillas inteligentes, invalidaciones, timeout).
-- [ ] 37. `AutoCloseFeature`: conectar el motor al tap, filtro por app, invalidación por ratón y cambio de app.
-- [ ] 38. Título dinámico del ítem del menú según los pares activos.
-- [ ] 39. Verificar CA-4.1 a CA-4.12 (incluido el teclado español y la latencia en Instruments).
+- [x] 35. `RingBuffer` y `PairTable` (pares por defecto de §6.4) en Core.
+- [x] 36. `AutoCloseEngine` con TDD: ≥ 25 casos (insertar, anidar, tab-out, overtype, backspace de par, comillas inteligentes, invalidaciones, timeout).
+- [x] 37. `AutoCloseFeature`: conectar el motor al tap, filtro por app, invalidación por ratón y cambio de app.
+- [x] 38. Título dinámico del ítem del menú según los pares activos.
+- [x] 39. Verificar CA-4.1 a CA-4.12 (incluido el teclado español y la latencia en Instruments).
 
 ### F6 – Snippets
 - [ ] 40. `Snippet` + `SnippetStore` (JSON en Application Support, versionado, import/export) en Core.

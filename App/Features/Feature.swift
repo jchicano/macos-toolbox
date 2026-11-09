@@ -46,6 +46,8 @@ public protocol Feature: AnyObject {
     static var descriptor: FeatureDescriptor { get }
     var descriptor: FeatureDescriptor { get }
     var isRunning: Bool { get }
+    /// Overrides the menu title (e.g. Auto-close lists active pairs). Nil = catalog title.
+    var menuTitle: String? { get }
     func start() throws
     func stop()
     func makeSubmenu() -> NSMenu?
@@ -53,5 +55,6 @@ public protocol Feature: AnyObject {
 
 public extension Feature {
     var descriptor: FeatureDescriptor { Self.descriptor }
+    var menuTitle: String? { nil }
     func makeSubmenu() -> NSMenu? { nil }
 }
