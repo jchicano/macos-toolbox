@@ -32,6 +32,9 @@ final class FeatureRegistry: ObservableObject {
         self.isAccessibilityGranted = isAccessibilityGranted
         for feature in features {
             self.features[feature.descriptor.id] = feature
+            if var stateful = feature as? any StatefulFeature {
+                stateful.onChange = { [weak self] in self?.notifyChanged() }
+            }
         }
     }
 
@@ -96,6 +99,11 @@ final class FeatureRegistry: ObservableObject {
     func run(_ id: FeatureID) {
         guard let feature = features[id] else { return }
         try? feature.start()
+    }
+
+    /// Bumps the generation so observers (the menu) rebuild.
+    func notifyChanged() {
+        generation += 1
     }
 
     /// Starts every persisted feature whose permissions are granted.

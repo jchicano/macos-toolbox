@@ -22,12 +22,24 @@ final class StatusItemController {
     ) {
         let store = store ?? SettingsStore()
         self.store = store
+        let keepAwake = KeepAwakeFeature(store: store)
+        let breaks = BreaksFeature(store: store)
         let registry = registry ?? FeatureRegistry(
-            features: StubFeature.makeDefaults(),
+            features: [
+                breaks,
+                keepAwake,
+                StubFeature.makeStub(for: .scrollVim),
+                StubFeature.makeStub(for: .autoClose),
+                StubFeature.makeStub(for: .snippets),
+                ColorPickerAction(store: store),
+            ],
             store: store,
             isAccessibilityGranted: PermissionCheck.isAccessibilityGranted
         )
         self.registry = registry
+        keepAwake.onExpired = { [weak registry] in
+            _ = registry?.setEnabled(false, for: .keepAwake)
+        }
         loginItems = LoginItemService(store: store)
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)

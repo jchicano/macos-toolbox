@@ -681,12 +681,12 @@ Orden crítico: F0 → F1 → (F2 ‖ F3) → (F4 ‖ F5) → F6 → F7 → F8 �
 - [x] 17. Restaurar el estado de las features al arrancar (las que no necesitan permisos primero).
 
 ### F2 – Features sin permisos
-- [ ] 18. `KeepAwakeFeature` (IOPMAssertion, duraciones, liberar en `stop`) + CA-2.x.
-- [ ] 19. `BreakScheduler` en Core (reloj inyectable) + tests de CA-1.3.
-- [ ] 20. `BreaksFeature`: notificaciones con acciones, detección de inactividad y bloqueo, submenú de intervalo.
-- [ ] 21. `BreakOverlayWindow` opcional (multipantalla, Skip/Snooze).
-- [ ] 22. `ColorFormatter` en Core + tests de CA-5.4.
-- [ ] 23. `ColorPickerAction` (NSColorSampler, sRGB, portapapeles, recientes, HUD).
+- [x] 18. `KeepAwakeFeature` (IOPMAssertion, duraciones, liberar en `stop`) + CA-2.x.
+- [x] 19. `BreakScheduler` en Core (reloj inyectable) + tests de CA-1.3.
+- [x] 20. `BreaksFeature`: notificaciones con acciones, detección de inactividad y bloqueo, submenú de intervalo.
+- [x] 21. `BreakOverlayWindow` opcional (multipantalla, Skip/Snooze).
+- [x] 22. `ColorFormatter` en Core + tests de CA-5.4.
+- [x] 23. `ColorPickerAction` (NSColorSampler, sRGB, portapapeles, recientes, HUD).
 
 ### F3 – Infra de input
 - [ ] 24. `PermissionsService` (AX, Post/Listen event access, notificaciones, Secure Input).

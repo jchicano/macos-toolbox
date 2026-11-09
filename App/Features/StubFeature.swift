@@ -2,6 +2,7 @@
 // F1 placeholder features. Each real feature (F2+) replaces its stub.
 
 import AppKit
+import ToolboxCore
 
 /// Minimal toggle/action used until the real implementation lands.
 /// State-only: start/stop flip isRunning, no system resources involved.
@@ -29,5 +30,10 @@ final class StubFeature: Feature {
     /// One stub per catalog entry, in menu order.
     static func makeDefaults() -> [StubFeature] {
         FeatureCatalog.all.map(StubFeature.init(descriptor:))
+    }
+
+    /// A stub for a single feature id.
+    static func makeStub(for id: FeatureID) -> StubFeature {
+        StubFeature(descriptor: FeatureCatalog.descriptor(for: id)!)
     }
 }
