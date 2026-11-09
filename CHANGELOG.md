@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- F4 Vim Scroll: `ScrollVimFeature` (Ctrl+D/U only, denylist + allowlist,
+  Cocoa text-field skip, half-page from cached window frame with 400 pt
+  fallback, virtual event location at window center) + `ScrollPoster` (pixel
+  scroll, 6-chunk smooth mode). 12 unit tests (modifiers, keycodes, filter,
+  text skip, delta sign, center math); live Safari QA pending AX grant (F9
+  M7/M8).
 - F3 input infrastructure: `PermissionsService`, `FrontmostAppTracker`
   (atomic cached bundleID), `FocusedElementCache` (AXObserver role + window
   size, main thread only), shared `EventTapManager` (own thread, on-demand

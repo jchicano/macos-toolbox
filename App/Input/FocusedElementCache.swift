@@ -21,6 +21,8 @@ struct FocusSnapshot: Equatable {
     var role: FocusRole
     /// Size of the focused window, when readable. Used for half-page math.
     var windowSize: CGSize?
+    /// Top-left origin of the focused window, when readable.
+    var windowOrigin: CGPoint?
 }
 
 final class FocusedElementCache: NSObject {
@@ -64,7 +66,7 @@ final class FocusedElementCache: NSObject {
         refreshTimer = nil
         NSWorkspace.shared.notificationCenter.removeObserver(self)
         detachObserver()
-        lock.synchronized { _snapshot = FocusSnapshot(role: .unknown, windowSize: nil) }
+        lock.synchronized { _snapshot = FocusSnapshot(role: .unknown, windowSize: nil, windowOrigin: nil) }
     }
 
     @objc private func activeAppChanged(_ notification: Notification) {
@@ -100,10 +102,10 @@ final class FocusedElementCache: NSObject {
         observedPID = 0
     }
 
-    /// Reads the focused role + window size off the tap path (main thread).
+    /// Reads the focused role + window frame off the tap path (main thread).
     func refresh() {
         guard let app = NSWorkspace.shared.frontmostApplication else {
-            store(FocusSnapshot(role: .unknown, windowSize: nil))
+            store(FocusSnapshot(role: .unknown, windowSize: nil, windowOrigin: nil))
             return
         }
         let appElement = AXUIElementCreateApplication(app.processIdentifier)
@@ -111,7 +113,7 @@ final class FocusedElementCache: NSObject {
         guard AXUIElementCopyAttributeValue(appElement, kAXFocusedUIElementAttribute as CFString, &focused) == .success,
               let focusedElement = focused as! AXUIElement?
         else {
-            store(FocusSnapshot(role: .unknown, windowSize: nil))
+            store(FocusSnapshot(role: .unknown, windowSize: nil, windowOrigin: nil))
             return
         }
         var roleValue: CFTypeRef?
@@ -123,8 +125,8 @@ final class FocusedElementCache: NSObject {
         } else {
             role = .unknown
         }
-        let windowSize = Self.focusedWindowSize(appElement: appElement)
-        store(FocusSnapshot(role: role, windowSize: windowSize))
+        let (windowSize, windowOrigin) = Self.focusedWindowFrame(appElement: appElement)
+        store(FocusSnapshot(role: role, windowSize: windowSize, windowOrigin: windowOrigin))
     }
 
     private static func classify(role: String, element: AXUIElement) -> FocusRole {
@@ -148,15 +150,26 @@ final class FocusedElementCache: NSObject {
         }
     }
 
-    private static func focusedWindowSize(appElement: AXUIElement) -> CGSize? {
+    private static func focusedWindowFrame(appElement: AXUIElement) -> (CGSize?, CGPoint?) {
         var window: CFTypeRef?
         guard AXUIElementCopyAttributeValue(appElement, kAXFocusedWindowAttribute as CFString, &window) == .success,
-              let windowElement = window as! AXUIElement?,
-              let sizeValue = windowElement.sizeValue(forAttribute: kAXSizeAttribute as CFString)
-        else { return nil }
+              let windowElement = window as! AXUIElement?
+        else { return (nil, nil) }
         var size = CGSize.zero
-        guard AXValueGetValue(sizeValue, .cgSize, &size) else { return nil }
-        return size
+        var origin = CGPoint.zero
+        var gotSize = false
+        var gotOrigin = false
+        if let sizeValue = windowElement.sizeValue(forAttribute: kAXSizeAttribute as CFString),
+           AXValueGetValue(sizeValue, .cgSize, &size)
+        {
+            gotSize = true
+        }
+        if let originValue = windowElement.sizeValue(forAttribute: kAXPositionAttribute as CFString),
+           AXValueGetValue(originValue, .cgPoint, &origin)
+        {
+            gotOrigin = true
+        }
+        return (gotSize ? size : nil, gotOrigin ? origin : nil)
     }
 
     private func store(_ snapshot: FocusSnapshot) {

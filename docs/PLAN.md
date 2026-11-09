@@ -699,9 +699,9 @@ Orden crítico: F0 → F1 → (F2 ‖ F3) → (F4 ‖ F5) → F6 → F7 → F8 �
 - [x] 31. Aviso ⚠️ en el menú si falta un permiso con la feature guardada como activa.
 
 ### F4 – Scroll Vim
-- [ ] 32. `ScrollPoster` (scroll en píxeles, modo suave, ubicación virtual en el centro de la ventana).
-- [ ] 33. `ScrollVimFeature`: solo `Ctrl` + D/U, filtro por app, omitir campos de texto.
-- [ ] 34. Verificar CA-3.1 a CA-3.6.
+- [x] 32. `ScrollPoster` (scroll en píxeles, modo suave, ubicación virtual en el centro de la ventana).
+- [x] 33. `ScrollVimFeature`: solo `Ctrl` + D/U, filtro por app, omitir campos de texto.
+- [x] 34. Verificar CA-3.1 a CA-3.6.
 
 ### F5 – Autocerrar
 - [ ] 35. `RingBuffer` y `PairTable` (pares por defecto de §6.4) en Core.
