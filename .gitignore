@@ -1,0 +1,91 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Volume/FS metadata
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.apdisk
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+
+# Disk images
+*.dmg
+*.iso
+*.img
+*.sparseimage
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+
+# Logs
+*.log
+logs/
+*.out
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Temporary/cache files
+*.tmp
+*.temp
+.cache/
+.tmp/
+
+# Shell history
+.zsh_history
+.bash_history
+.bash_sessions/
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+DerivedData/
+build/
+*.moved-aside
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# XcodeGen generated project (regenerate with `make gen`)
+Toolbox.xcodeproj/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Archives and export
+*.xcarchive
+*.ipa
+Export/
+
+# Distribution
+dist/
+*.dmg

@@ -1,0 +1,84 @@
+name: Toolbox
+options:
+  bundleIdPrefix: com.jchicano
+  deploymentTarget:
+    macOS: "12.0"
+  developmentRegion: en
+  usesTabs: false
+  indentWidth: 4
+  tabWidth: 4
+
+configs:
+  Debug:
+    type: debug
+  Release:
+    type: release
+
+packages:
+  ToolboxCore:
+    path: Packages/ToolboxCore
+
+targets:
+  Toolbox:
+    type: application
+    platform: macOS
+    deploymentTarget: "12.0"
+    sources:
+      - path: App
+        excludes:
+          - "**/*.md"
+    info:
+      path: Config/Info.plist
+    entitlements:
+      path: Config/Toolbox.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jchicano.toolbox
+        PRODUCT_NAME: Toolbox
+        SWIFT_VERSION: "5.0"
+        SWIFT_EMIT_LOC_STRINGS: YES
+        MACOSX_DEPLOYMENT_TARGET: "12.0"
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+        ENABLE_HARDENED_RUNTIME: YES
+        ARCHS: $(ARCHS_STANDARD)
+      configs:
+        Debug:
+          ENABLE_HARDENED_RUNTIME: NO
+        Release:
+          ARCHS: arm64 x86_64
+          ONLY_ACTIVE_ARCH: NO
+    dependencies:
+      - package: ToolboxCore
+    scheme:
+      testTargets:
+        - ToolboxAppTests
+
+  ToolboxAppTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "12.0"
+    sources:
+      - path: Tests/ToolboxAppTests
+    dependencies:
+      - target: Toolbox
+    settings:
+      base:
+        PRODUCT_NAME: ToolboxAppTests
+        PRODUCT_MODULE_NAME: ToolboxAppTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.jchicano.toolbox.tests
+        SWIFT_VERSION: "5.0"
+        MACOSX_DEPLOYMENT_TARGET: "12.0"
+        CODE_SIGN_IDENTITY: "-"
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  Toolbox:
+    build:
+      targets:
+        Toolbox: all
+        ToolboxAppTests: [test]
+    test:
+      targets:
+        - ToolboxAppTests

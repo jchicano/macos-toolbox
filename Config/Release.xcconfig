@@ -1,0 +1,10 @@
+// Release build settings shared by xcodebuild invocations.
+// Referenced from the Makefile; XcodeGen inlines per-target settings in project.yml.
+
+ARCHS = arm64 x86_64
+ONLY_ACTIVE_ARCH = NO
+MACOSX_DEPLOYMENT_TARGET = 12.0
+ENABLE_HARDENED_RUNTIME = YES
+CODE_SIGN_IDENTITY = -
+SWIFT_OPTIMIZATION_LEVEL = -O
+SWIFT_COMPILATION_MODE = wholemodule
