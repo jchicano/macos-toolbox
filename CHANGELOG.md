@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- F3 input infrastructure: `PermissionsService`, `FrontmostAppTracker`
+  (atomic cached bundleID), `FocusedElementCache` (AXObserver role + window
+  size, main thread only), shared `EventTapManager` (own thread, on-demand
+  install/destroy, priority Snippets→AutoClose→ScrollVim, synthetic mark,
+  timeout re-enable, signposts, DEBUG key logger), `TextInserter`/`KeyPoster`
+  (marked Unicode/chunked paste), English `PermissionOnboardingView` with 1 s
+  grant polling, ⚠️ menu warning for revoked permission. Verified live: ⚠️
+  item renders, onboarding window opens; 49 tests green (Core 23, app 26).
 - F2 permissionless features: `KeepAwakeFeature` (IOPM assertion, duration
   submenu, auto-release on expiry), `BreakScheduler` core (injectable clock,
   idle pause, long-absence reset) + `BreaksFeature` (30 s polling, UN

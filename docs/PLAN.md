@@ -689,14 +689,14 @@ Orden crítico: F0 → F1 → (F2 ‖ F3) → (F4 ‖ F5) → F6 → F7 → F8 �
 - [x] 23. `ColorPickerAction` (NSColorSampler, sRGB, portapapeles, recientes, HUD).
 
 ### F3 – Infra de input
-- [ ] 24. `PermissionsService` (AX, Post/Listen event access, notificaciones, Secure Input).
-- [ ] 25. `PermissionOnboardingView` con el copy de §5 **traducido al inglés** y polling cada 1 s.
-- [ ] 26. `FrontmostAppTracker` (NSWorkspace, bundleID cacheado y atómico).
-- [ ] 27. `FocusedElementCache` (AXObserver de la app frontal: rol con foco, tamaño de la ventana con foco).
-- [ ] 28. `AppFilter` en Core (denylist/allowlist, comodín `.*`) + tests.
-- [ ] 29. `EventTapManager`: hilo propio, instalar/destruir bajo demanda, consumidores con prioridad (Snippets → AutoClose → ScrollVim), `.pass/.consume/.replace`, marca sintética, re-enable por timeout, signposts.
-- [ ] 30. `TextInserter` compartido (Unicode por trozos, pegado vía portapapeles con restauración) y `KeyPoster` (←, →, ⌫, ⌦) con marca sintética.
-- [ ] 31. Aviso ⚠️ en el menú si falta un permiso con la feature guardada como activa.
+- [x] 24. `PermissionsService` (AX, Post/Listen event access, notificaciones, Secure Input).
+- [x] 25. `PermissionOnboardingView` con el copy de §5 **traducido al inglés** y polling cada 1 s.
+- [x] 26. `FrontmostAppTracker` (NSWorkspace, bundleID cacheado y atómico).
+- [x] 27. `FocusedElementCache` (AXObserver de la app frontal: rol con foco, tamaño de la ventana con foco).
+- [x] 28. `AppFilter` en Core (denylist/allowlist, comodín `.*`) + tests.
+- [x] 29. `EventTapManager`: hilo propio, instalar/destruir bajo demanda, consumidores con prioridad (Snippets → AutoClose → ScrollVim), `.pass/.consume/.replace`, marca sintética, re-enable por timeout, signposts.
+- [x] 30. `TextInserter` compartido (Unicode por trozos, pegado vía portapapeles con restauración) y `KeyPoster` (←, →, ⌫, ⌦) con marca sintética.
+- [x] 31. Aviso ⚠️ en el menú si falta un permiso con la feature guardada como activa.
 
 ### F4 – Scroll Vim
 - [ ] 32. `ScrollPoster` (scroll en píxeles, modo suave, ubicación virtual en el centro de la ventana).

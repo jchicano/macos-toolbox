@@ -8,6 +8,7 @@ import ToolboxCore
 struct MenuActions {
     var onToggle: (FeatureID) -> ToggleResult
     var onRunAction: (FeatureID) -> Void
+    var onShowOnboarding: () -> Void
     var onHelp: () -> Void
     var onPreferences: () -> Void
     var onLaunchAtLogin: () -> Bool
@@ -32,6 +33,8 @@ final class MenuTarget: NSObject {
         actions?.onRunAction(id)
     }
 
+    @objc func showOnboarding(_: NSMenuItem) { actions?.onShowOnboarding() }
+
     @objc func help(_: NSMenuItem) { actions?.onHelp() }
     @objc func preferences(_: NSMenuItem) { actions?.onPreferences() }
     @objc func launchAtLogin(_: NSMenuItem) { _ = actions?.onLaunchAtLogin() }
@@ -43,6 +46,7 @@ enum MenuBuilder {
     static func build(
         registry: FeatureRegistry,
         loginItemEnabled: Bool,
+        missingPermission: [FeatureDescriptor],
         actions: MenuActions,
         target: MenuTarget
     ) -> NSMenu {
@@ -72,6 +76,17 @@ enum MenuBuilder {
         }
 
         menu.addItem(.separator())
+
+        if !missingPermission.isEmpty {
+            let warning = NSMenuItem(
+                title: NSLocalizedString("⚠️ Accessibility permission required…", comment: ""),
+                action: #selector(MenuTarget.showOnboarding(_:)),
+                keyEquivalent: ""
+            )
+            warning.target = target
+            menu.addItem(warning)
+            menu.addItem(.separator())
+        }
 
         let help = NSMenuItem(
             title: NSLocalizedString("Help", comment: ""),

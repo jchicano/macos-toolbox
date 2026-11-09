@@ -54,6 +54,13 @@ final class FeatureRegistry: ObservableObject {
         FeatureCatalog.descriptor(for: id)
     }
 
+    /// Persisted-enabled features whose permission is currently missing (menu warning).
+    func missingPermissionFeatures() -> [FeatureDescriptor] {
+        FeatureCatalog.all.filter { descriptor in
+            store.settings.enabled.contains(descriptor.id) && missingPermission(for: descriptor) != nil
+        }
+    }
+
     private func missingPermission(for descriptor: FeatureDescriptor) -> Permission? {
         if descriptor.requiredPermissions.contains(.accessibility), !isAccessibilityGranted() {
             return .accessibility

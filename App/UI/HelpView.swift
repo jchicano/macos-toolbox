@@ -83,6 +83,6 @@ enum HelpInfo {
     }
 
     static var accessibilityGranted: Bool {
-        PermissionCheck.isAccessibilityGranted()
+        PermissionsService.isAccessibilityTrusted()
     }
 }

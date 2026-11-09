@@ -13,13 +13,19 @@ final class MenuBuilderTests: XCTestCase {
             store: store,
             isAccessibilityGranted: { granted }
         )
+        return (buildMenu(registry: registry), registry)
+    }
+
+    private func buildMenu(registry: FeatureRegistry) -> NSMenu {
         let target = MenuTarget()
-        let menu = MenuBuilder.build(
+        return MenuBuilder.build(
             registry: registry,
             loginItemEnabled: false,
+            missingPermission: registry.missingPermissionFeatures(),
             actions: MenuActions(
                 onToggle: { _ in .disabled },
                 onRunAction: { _ in },
+                onShowOnboarding: {},
                 onHelp: {},
                 onPreferences: {},
                 onLaunchAtLogin: { false },
@@ -27,7 +33,6 @@ final class MenuBuilderTests: XCTestCase {
             ),
             target: target
         )
-        return (menu, registry)
     }
 
     func testMenuOrderAndEnglishTitles() {
@@ -50,20 +55,34 @@ final class MenuBuilderTests: XCTestCase {
         let (menuBefore, registry) = makeMenu()
         XCTAssertEqual(menuBefore.items[0].state, .off)
         _ = registry.setEnabled(true, for: .breaks)
-        let target = MenuTarget()
-        let menuAfter = MenuBuilder.build(
-            registry: registry,
-            loginItemEnabled: false,
-            actions: MenuActions(
-                onToggle: { _ in .disabled },
-                onRunAction: { _ in },
-                onHelp: {},
-                onPreferences: {},
-                onLaunchAtLogin: { false },
-                onQuit: {}
-            ),
-            target: target
-        )
+        let menuAfter = buildMenu(registry: registry)
         XCTAssertEqual(menuAfter.items[0].state, .on)
+    }
+
+    func testMissingPermissionWarning() {
+        // Persist an AX-gated feature while permission is missing.
+        let (menu, registry) = makeMenu(granted: true)
+        _ = registry.setEnabled(true, for: .scrollVim)
+        XCTAssertEqual(menu.items.count, 12)
+        let denied = FeatureRegistry(
+            features: StubFeature.makeDefaults(),
+            store: persistedStore(from: registry),
+            isAccessibilityGranted: { false }
+        )
+        let warned = buildMenu(registry: denied)
+        // 12 + warning + separator.
+        XCTAssertEqual(warned.items.count, 14)
+        XCTAssertTrue(warned.items[7].title.hasPrefix("⚠️"))
+    }
+
+    /// Reopens the same persisted store in a new registry (simulates relaunch).
+    private func persistedStore(from registry: FeatureRegistry) -> SettingsStore {
+        // The registry under test shares its store's defaults suite; a fresh
+        // store on the same suite sees the same persisted values. The suite
+        // name is internal, so rebuild from the enabled set instead.
+        let store = SettingsStore(defaults: UserDefaults(suiteName: #function + UUID().uuidString)!)
+        let enabled = FeatureCatalog.all.map(\.id).filter { registry.isEnabled($0) }
+        store.update { $0.enabled = Set(enabled) }
+        return store
     }
 }
