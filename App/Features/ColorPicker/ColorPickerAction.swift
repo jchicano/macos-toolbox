@@ -19,8 +19,6 @@ final class ColorPickerAction: NSObject, Feature {
     private(set) var isRunning = false
 
     private let store: SettingsStore
-    private var hudTimer: Timer?
-    private var hudPanel: NSPanel?
 
     init(store: SettingsStore) {
         self.store = store
@@ -142,38 +140,8 @@ final class ColorPickerAction: NSObject, Feature {
         return image
     }
 
-    // MARK: - HUD
-
     private func showHUD(value: String) {
-        hudTimer?.invalidate()
-        hudPanel?.orderOut(nil)
         let template = NSLocalizedString("Copied %@", comment: "")
-        let label = NSTextField(labelWithString: String.localizedStringWithFormat(template, value))
-        label.alignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        let content = NSView(frame: NSRect(x: 0, y: 0, width: 240, height: 44))
-        content.addSubview(label)
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: content.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: content.centerYAnchor),
-        ])
-        let panel = NSPanel(
-            contentRect: NSRect(x: 0, y: 0, width: 240, height: 44),
-            styleMask: [.nonactivatingPanel, .borderless],
-            backing: .buffered,
-            defer: false
-        )
-        panel.contentView = content
-        panel.backgroundColor = NSColor(white: 0.15, alpha: 0.92)
-        panel.isOpaque = false
-        panel.hasShadow = true
-        panel.level = .floating
-        panel.center()
-        panel.orderFrontRegardless()
-        hudPanel = panel
-        hudTimer = Timer.scheduledTimer(withTimeInterval: 1.2, repeats: false) { [weak self] _ in
-            self?.hudPanel?.orderOut(nil)
-            self?.hudPanel = nil
-        }
+        HudToast.show(text: String.localizedStringWithFormat(template, value))
     }
 }

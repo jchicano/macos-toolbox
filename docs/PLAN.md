@@ -711,12 +711,12 @@ Orden crítico: F0 → F1 → (F2 ‖ F3) → (F4 ‖ F5) → F6 → F7 → F8 �
 - [x] 39. Verificar CA-4.1 a CA-4.12 (incluido el teclado español y la latencia en Instruments).
 
 ### F6 – Snippets
-- [ ] 40. `Snippet` + `SnippetStore` (JSON en Application Support, versionado, import/export) en Core.
-- [ ] 41. `SnippetTemplate` con TDD: `{clipboard}`, `{date}`, `{time}`, `{cursor}`, escape `{{`.
-- [ ] 42. `SnippetEngine` con TDD (≥ 15 casos: delimitadores, prefijos solapados, invalidación, Unicode).
-- [ ] 43. `SnippetsFeature`: consumidor del tap, backspaces del trigger + `TextInserter`, colocación de `{cursor}`, filtro por app.
-- [ ] 44. `SnippetPickerPanel` (`Insert Snippet…`): búsqueda fuzzy, Return inserta en la app previa; fallback sin AX a portapapeles + HUD.
-- [ ] 45. Snippets de ejemplo en primer arranque (`;date`, `;sig` vacío editable) y verificar CA-6.1 a CA-6.7.
+- [x] 40. `Snippet` + `SnippetStore` (JSON en Application Support, versionado, import/export) en Core.
+- [x] 41. `SnippetTemplate` con TDD: `{clipboard}`, `{date}`, `{time}`, `{cursor}`, escape `{{`.
+- [x] 42. `SnippetEngine` con TDD (≥ 15 casos: delimitadores, prefijos solapados, invalidación, Unicode).
+- [x] 43. `SnippetsFeature`: consumidor del tap, backspaces del trigger + `TextInserter`, colocación de `{cursor}`, filtro por app.
+- [x] 44. `SnippetPickerPanel` (`Insert Snippet…`): búsqueda fuzzy, Return inserta en la app previa; fallback sin AX a portapapeles + HUD.
+- [x] 45. Snippets de ejemplo en primer arranque (`;date`, `;sig` vacío editable) y verificar CA-6.1 a CA-6.7.
 
 ### F7 – Preferencias y Ayuda
 - [ ] 46. `PreferencesView` con pestañas (§9 F7), selector de apps (`NSOpenPanel` en `/Applications` → bundleID).

@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- F6 Snippets: `SnippetEngine` core (delimiter/immediate modes, longest-match,
+  ";"-safe delimiters, 32-char buffer) + `SnippetTemplate` ({clipboard},
+  {date}, {time}, {cursor}, {{ escape) + `SnippetStore` (versioned JSON in
+  Application Support, seed, import/export) with 27 unit tests (CA-6.5);
+  `SnippetsFeature` tap consumer (priority 10, trigger backspaces,
+  delimiter re-emit, paste path over 200 units, per-event settings refresh,
+  `Insert Snippet…` submenu + searchable picker with no-AX clipboard+HUD
+  fallback). Verified live: seed file created, submenu and picker open;
+  expansion typing pending AX grant (F9 M17).
 - F5 Auto-close: `AutoCloseEngine` core (insert/tab-out/overtype/pair-backspace,
   smart quotes, Option-combo support for Spanish brackets, navigation/mouse/
   focus-change/timeout invalidation) with 30 unit tests (CA-4.11), plus
