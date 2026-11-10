@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- F8 packaging: `make-dmg.sh` verified (clean DMG mounts, app only),
+  ad-hoc + hardened runtime confirmed on app and login helper, `notarize.sh`
+  ready (keychain profile pending). `spctl` acceptance + M16 pending
+  Developer ID (expected rejection without notarization).
 - F7 Preferences + Help: tabbed `PreferencesView` (General, Breaks, Keep
   Awake, Vim Scroll, Auto-close with pair table, Snippets with editor +
   import/export, Color) bound to the stores with live effect, shared

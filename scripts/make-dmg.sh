@@ -12,5 +12,7 @@ if [ ! -d "$APP" ]; then
 fi
 
 rm -f "$DMG"
+# Keep the image clean of Finder metadata.
+find "$DIST" -name '.DS_Store' -delete
 hdiutil create -volname Toolbox -srcfolder "$DIST" -ov -format UDZO "$DMG"
 echo "Created $DMG"

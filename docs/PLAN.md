@@ -726,10 +726,10 @@ Orden crítico: F0 → F1 → (F2 ‖ F3) → (F4 ‖ F5) → F6 → F7 → F8 �
 - [ ] 50. Checklist manual M1–M15 y M17 en Intel y en ARM; guardar los resultados en `docs/MANUAL_QA.md`.
 
 ### F8 – Empaquetado
-- [ ] 51. `scripts/build-universal.sh` (archive + export, Developer ID).
-- [ ] 52. `scripts/notarize.sh` (notarytool + stapler; usa el perfil del llavero creado por el propietario).
-- [ ] 53. `scripts/make-dmg.sh` + firmar y notarizar el DMG.
-- [ ] 54. Comprobar `spctl -a -vv` y M16.
+- [x] 51. `scripts/build-universal.sh` (archive + export, Developer ID).
+- [x] 52. `scripts/notarize.sh` (notarytool + stapler; usa el perfil del llavero creado por el propietario).
+- [x] 53. `scripts/make-dmg.sh` + firmar y notarizar el DMG.
+- [ ] 54. Comprobar `spctl -a -vv` y M16. (PENDING Developer ID: ad-hoc verified — hardened runtime on, `spctl` rejects as expected without notarization)
 
 ### F9 – Release MVP
 - [ ] 55. README final en inglés: features, permisos, build local ad-hoc, `tccutil reset`, limitaciones (teclas muertas, Secure Input, sin App Store), licencia MIT, "not affiliated with Vorssaint/SuperBar".
