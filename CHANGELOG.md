@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.1.0] - 2026-11-10
+
+First MVP release: menu bar app (macOS 12+, universal arm64/x86_64) with
+Breaks, Keep Awake, Vim Scroll, Auto-close, Snippets and Color Picker.
+Ad-hoc signed, hardened runtime, no sandbox (event taps are incompatible
+with the App Store sandbox). Live verification on Intel is recorded in
+`docs/MANUAL_QA.md`; Accessibility-gated typing QA and notarization remain
+pending (no Developer ID on the build machine).
 
 ### Added
 - F8 packaging: `make-dmg.sh` verified (clean DMG mounts, app only),

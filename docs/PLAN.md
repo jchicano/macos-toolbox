@@ -732,8 +732,8 @@ Orden crítico: F0 → F1 → (F2 ‖ F3) → (F4 ‖ F5) → F6 → F7 → F8 �
 - [ ] 54. Comprobar `spctl -a -vv` y M16. (PENDING Developer ID: ad-hoc verified — hardened runtime on, `spctl` rejects as expected without notarization)
 
 ### F9 – Release MVP
-- [ ] 55. README final en inglés: features, permisos, build local ad-hoc, `tccutil reset`, limitaciones (teclas muertas, Secure Input, sin App Store), licencia MIT, "not affiliated with Vorssaint/SuperBar".
-- [ ] 56. `CHANGELOG.md` y release notes `v0.1.0` en inglés.
+- [x] 55. README final en inglés: features, permisos, build local ad-hoc, `tccutil reset`, limitaciones (teclas muertas, Secure Input, sin App Store), licencia MIT, "not affiliated with Vorssaint/SuperBar".
+- [x] 56. `CHANGELOG.md` y release notes `v0.1.0` en inglés.
 
 ### F10 – Fase 2 YAML (SuperBar-style)
 - [ ] 57. Añadir la dependencia Yams; `ConfigModel` (bookmarks, workspaces, commands, sections, snippets, include) + `YAMLLoader` + `Validator` con errores por línea + `ConfigTests`.
