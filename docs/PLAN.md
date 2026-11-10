@@ -719,10 +719,10 @@ Orden crítico: F0 → F1 → (F2 ‖ F3) → (F4 ‖ F5) → F6 → F7 → F8 �
 - [x] 45. Snippets de ejemplo en primer arranque (`;date`, `;sig` vacío editable) y verificar CA-6.1 a CA-6.7.
 
 ### F7 – Preferencias y Ayuda
-- [ ] 46. `PreferencesView` con pestañas (§9 F7), selector de apps (`NSOpenPanel` en `/Applications` → bundleID).
-- [ ] 47. Pestaña Snippets: tabla añadir/editar/borrar, toggle por snippet, import/export.
-- [ ] 48. Help completa: descripción de las utilidades, permisos ✅/❌, Secure Input, enlace al README.
-- [ ] 49. Auditoría de idioma: ninguna string de UI, comentario ni identificador en español (salvo datos de tests y pares `¿¡`).
+- [x] 46. `PreferencesView` con pestañas (§9 F7), selector de apps (`NSOpenPanel` en `/Applications` → bundleID).
+- [x] 47. Pestaña Snippets: tabla añadir/editar/borrar, toggle por snippet, import/export.
+- [x] 48. Help completa: descripción de las utilidades, permisos ✅/❌, Secure Input, enlace al README.
+- [x] 49. Auditoría de idioma: ninguna string de UI, comentario ni identificador en español (salvo datos de tests y pares `¿¡`).
 - [ ] 50. Checklist manual M1–M15 y M17 en Intel y en ARM; guardar los resultados en `docs/MANUAL_QA.md`.
 
 ### F8 – Empaquetado

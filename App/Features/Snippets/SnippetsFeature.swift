@@ -55,9 +55,10 @@ final class SnippetsFeature: NSObject, TapConsumer, StatefulFeature {
     }
 
     /// Convenience wiring for production (tracker + cache).
-    convenience init(store: SettingsStore, tapManager: EventTapManager, tracker: FrontmostAppTracker, focusCache: FocusedElementCache) {
+    convenience init(store: SettingsStore, snippetStore: SnippetStore? = nil, tapManager: EventTapManager, tracker: FrontmostAppTracker, focusCache: FocusedElementCache) {
         self.init(
             store: store,
+            snippetStore: snippetStore,
             tapManager: tapManager,
             frontmostBundleID: { tracker.frontmostBundleID },
             focusSnapshot: { focusCache.snapshot }

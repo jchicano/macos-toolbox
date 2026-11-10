@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Snippets JSON file in Application Support (versioned, import/export).
 
+import Combine
 import Foundation
 
 /// File envelope for snippets.json.
@@ -15,8 +16,9 @@ public struct SnippetFile: Codable, Equatable {
 }
 
 /// Loads/saves the user's snippets. Seeds examples on first launch.
-public final class SnippetStore {
-    public private(set) var snippets: [Snippet]
+/// Observable so Preferences edits refresh the UI; features re-read per event.
+public final class SnippetStore: ObservableObject {
+    @Published public private(set) var snippets: [Snippet]
     private let fileURL: URL
 
     /// Example snippets seeded when no file exists yet.

@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- F7 Preferences + Help: tabbed `PreferencesView` (General, Breaks, Keep
+  Awake, Vim Scroll, Auto-close with pair table, Snippets with editor +
+  import/export, Color) bound to the stores with live effect, shared
+  `AppFilterEditor` with `/Applications` picker, complete `HelpView`
+  (per-feature docs, AX/notification state, Secure Input note, README link).
+  Verified live: both windows open; 68 app tests green.
 - F6 Snippets: `SnippetEngine` core (delimiter/immediate modes, longest-match,
   ";"-safe delimiters, 32-char buffer) + `SnippetTemplate` ({clipboard},
   {date}, {time}, {cursor}, {{ escape) + `SnippetStore` (versioned JSON in

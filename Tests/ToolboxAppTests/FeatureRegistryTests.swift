@@ -118,6 +118,22 @@ final class FeatureRegistryTests: XCTestCase {
         XCTAssertFalse(fakes[1].isRunning)
     }
 
+    func testRestartRestartsEnabledFeature() {
+        let (registry, _, fakes) = makeRegistry()
+        _ = registry.setEnabled(true, for: .breaks)
+        let starts = fakes[0].startCount
+        registry.restart(.breaks)
+        XCTAssertTrue(fakes[0].isRunning)
+        XCTAssertEqual(fakes[0].startCount, starts + 1)
+    }
+
+    func testRestartSkipsDisabledFeature() {
+        let (registry, _, fakes) = makeRegistry()
+        registry.restart(.breaks)
+        XCTAssertFalse(fakes[0].isRunning)
+        XCTAssertEqual(fakes[0].startCount, 0)
+    }
+
     func testUnknownFeatureIsDisabled() {
         // Registry built with a subset: other ids are unknown.
         let store = makeStore()

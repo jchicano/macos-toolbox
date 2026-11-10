@@ -11,6 +11,7 @@ final class StatusItemController {
     private let store: SettingsStore
     private let registry: FeatureRegistry
     private let loginItems: LoginItemService
+    private let snippetStore: SnippetStore
     private let tracker = FrontmostAppTracker()
     private let focusCache: FocusedElementCache
     private let tapManager: EventTapManager
@@ -30,6 +31,8 @@ final class StatusItemController {
     ) {
         let store = store ?? SettingsStore()
         self.store = store
+        let snippetStore = SnippetStore()
+        self.snippetStore = snippetStore
         focusCache = FocusedElementCache(tracker: tracker)
         tapManager = EventTapManager(tracker: tracker, focusCache: focusCache)
         #if DEBUG
@@ -39,7 +42,7 @@ final class StatusItemController {
         let breaks = BreaksFeature(store: store)
         let scrollVim = ScrollVimFeature(store: store, tapManager: tapManager, tracker: tracker, focusCache: focusCache)
         let autoClose = AutoCloseFeature(store: store, tapManager: tapManager, tracker: tracker, focusCache: focusCache)
-        let snippets = SnippetsFeature(store: store, tapManager: tapManager, tracker: tracker, focusCache: focusCache)
+        let snippets = SnippetsFeature(store: store, snippetStore: snippetStore, tapManager: tapManager, tracker: tracker, focusCache: focusCache)
         let registry = registry ?? FeatureRegistry(
             features: [
                 breaks,
@@ -172,12 +175,13 @@ final class StatusItemController {
     // MARK: - Help and Preferences (full versions land in F7)
 
     private func showHelp() {
+        HelpInfo.refreshNotificationState()
         if helpWindow == nil {
             let view = HelpView()
             let hosting = NSHostingController(rootView: view)
             let window = NSWindow(contentViewController: hosting)
             window.title = NSLocalizedString("Toolbox Help", comment: "")
-            window.styleMask = [.titled, .closable]
+            window.styleMask = [.titled, .closable, .resizable]
             window.center()
             helpWindow = window
         }
@@ -187,11 +191,16 @@ final class StatusItemController {
 
     private func showPreferences() {
         if preferencesWindow == nil {
-            let view = PreferencesPlaceholderView()
+            let view = PreferencesView(
+                store: store,
+                snippetStore: snippetStore,
+                loginItems: loginItems,
+                restartFeature: { [weak self] id in self?.registry.restart(id) }
+            )
             let hosting = NSHostingController(rootView: view)
             let window = NSWindow(contentViewController: hosting)
             window.title = NSLocalizedString("Preferences", comment: "")
-            window.styleMask = [.titled, .closable]
+            window.styleMask = [.titled, .closable, .resizable]
             window.center()
             preferencesWindow = window
         }

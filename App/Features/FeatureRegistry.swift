@@ -108,6 +108,16 @@ final class FeatureRegistry: ObservableObject {
         try? feature.start()
     }
 
+    /// Restarts a persisted-enabled feature (settings changed live).
+    func restart(_ id: FeatureID) {
+        guard let feature = features[id],
+              store.settings.enabled.contains(id)
+        else { return }
+        feature.stop()
+        try? feature.start()
+        generation += 1
+    }
+
     /// Bumps the generation so observers (the menu) rebuild.
     func notifyChanged() {
         generation += 1
