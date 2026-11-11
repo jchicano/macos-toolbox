@@ -58,6 +58,7 @@ targets:
           ENABLE_HARDENED_RUNTIME: NO
           ONLY_ACTIVE_ARCH: YES
           ENABLE_TESTABILITY: YES
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
         Release:
           ARCHS: arm64 x86_64
           ONLY_ACTIVE_ARCH: NO

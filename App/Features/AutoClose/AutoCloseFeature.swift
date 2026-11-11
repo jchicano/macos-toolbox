@@ -102,6 +102,16 @@ final class AutoCloseFeature: NSObject, TapConsumer, StatefulFeature {
             return .pass
         }
         refreshEngine()
+        #if DEBUG
+        if type == .keyDown {
+            FileManager.default.createFile(atPath: "/tmp/toolbox-debug.log", contents: nil)
+            if let h = FileHandle(forWritingAtPath: "/tmp/toolbox-debug.log") {
+                h.seekToEndOfFile()
+                h.write("AUTOCLOSE keydown\n".data(using: .utf8)!)
+                h.closeFile()
+            }
+        }
+        #endif
         let keyCode = UInt16(event.getIntegerValueField(.keyboardEventKeycode))
         let modifiers = Self.modifiers(for: event.flags)
         let chars = Self.unicodeString(for: event)
