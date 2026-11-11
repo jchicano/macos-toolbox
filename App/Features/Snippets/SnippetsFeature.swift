@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Snippets: trigger expansion in any app plus a searchable insert panel.
-// Priority 10: evaluated before Auto-close and Vim Scroll.
+// Priority 10: evaluated before Auto-close.
 
 import AppKit
 import CoreGraphics

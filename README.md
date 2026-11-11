@@ -1,9 +1,9 @@
 # Toolbox
 
 A lightweight macOS menu bar utility app (no Dock icon). A collection of small
-utilities — break reminders, keep-awake, Vim-style scrolling, auto-closing
-pairs, text snippets and a color picker — each toggled from a single menu
-with a checkmark. State persists across restarts.
+utilities — break reminders, keep-awake, auto-closing pairs, text snippets
+and a color picker — each toggled from a single menu with a checkmark.
+State persists across restarts.
 
 ![macOS 12+](https://img.shields.io/badge/macOS-12%2B-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green)
@@ -14,7 +14,6 @@ with a checkmark. State persists across restarts.
 |---|---|---|
 | Breaks | Notifies you every N minutes (snooze / skip / start now), optional full-screen overlay, pauses while idle | Notifications |
 | Keep Awake | Prevents display/system sleep via a power assertion, optional auto-release duration | — |
-| Vim Scroll | `Ctrl+D` / `Ctrl+U` scroll half a page in the frontmost app (skips terminals, editors, text fields) | Accessibility |
 | Auto-close | Pairs `( [ { " ' \` < ¿ ¡ “ « ‘`, Tab jumps out, overtype, pair backspace, smart quotes | Accessibility |
 | Snippets | Expands `;triggers` into text (`{clipboard}`, `{date}`, `{time}`, `{cursor}`), or insert from the searchable menu picker | Accessibility (expansion) |
 | Color Picker | Native loupe, copies sRGB HEX / rgb() / hsl() / SwiftUI / NSColor, keeps recents | — |
@@ -56,7 +55,7 @@ release owner and is never committed).
 
 | Permission | Used by | Notes |
 |---|---|---|
-| Accessibility | Vim Scroll, Auto-close, Snippet expansion | Requested on first toggle with an in-app guide; see `docs/PERMISSIONS.md` |
+| Accessibility | Auto-close, Snippet expansion | Requested on first toggle with an in-app guide; see `docs/PERMISSIONS.md` |
 | Notifications | Breaks | Requested when Breaks is enabled |
 | Automation | Future YAML phase only | Not used by the MVP |
 | Screen Recording | None | `NSColorSampler` does not require it |

@@ -4,7 +4,7 @@
 
 | Permission | Used by | API |
 |---|---|---|
-| Accessibility | Vim Scroll, Auto-close, Snippet expansion | `AXIsProcessTrustedWithOptions`, `CGEvent.tapCreate` |
+| Accessibility | Auto-close, Snippet expansion | `AXIsProcessTrustedWithOptions`, `CGEvent.tapCreate` |
 | Input Monitoring | May be requested by the OS for key event taps | `CGPreflightListenEventAccess` (status only) |
 | Notifications | Breaks | `UNUserNotificationCenter.requestAuthorization` |
 | Screen Recording | **Nobody** | `NSColorSampler` does not need it; never requested |

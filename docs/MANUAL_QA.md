@@ -11,8 +11,8 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | M4 | Breaks: notification, snooze, skip, idle/screen-lock pause | ☐ (unit-tested; live pending) | ☐ |
 | M5 | Color picker: correct hex, Esc cancels, recents, no screen-recording prompt | ☐ (unit-tested; live pending) | ☐ |
 | M6 | Accessibility onboarding: deny → not enabled; grant → auto-enabled | ☐ | ☐ |
-| M7 | Vim Scroll: Safari, Chrome, Mail, Finder list, Notes outside text fields | ☐ | ☐ |
-| M8 | Vim Scroll: Terminal/iTerm/VS Code unaffected; `^D` in text field deletes | ☐ | ☐ |
+| M7 | Vim Scroll: removed at user request | N/A (removed) | N/A |
+| M8 | Vim Scroll: removed at user request | N/A (removed) | N/A |
 | M9 | Auto-close: CA-4.1–4.7 in TextEdit, Notes, Slack, browser text fields | ☐ | ☐ |
 | M10 | Auto-close with Spanish – ISO layout: `¿ ¡ ( [ { " ' dead-key backtick` | ☐ | ☐ |
 | M11 | Auto-close inactive in VS Code, Xcode, Terminal, password fields | ☐ | ☐ |

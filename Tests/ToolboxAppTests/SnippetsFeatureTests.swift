@@ -152,7 +152,7 @@ final class SnippetsFeatureTests: XCTestCase {
     }
 
     func testPriorityBelowAutoClose() {
-        // Order is Snippets(10) → AutoClose(20) → ScrollVim(30).
+        // Order is Snippets(10) → AutoClose(20).
         let (feature, _, _) = makeFeature()
         XCTAssertEqual(feature.tapPriority, 10)
         XCTAssertLessThan(feature.tapPriority, AutoCloseFeature.descriptor.menuOrder * 10)

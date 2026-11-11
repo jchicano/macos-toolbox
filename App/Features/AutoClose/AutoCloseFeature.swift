@@ -7,7 +7,7 @@ import CoreGraphics
 import ToolboxCore
 
 /// Feeds resolved Unicode into AutoCloseEngine and posts the returned action.
-/// Priority 20: after Snippets, before ScrollVim.
+/// Priority 20: after Snippets.
 final class AutoCloseFeature: NSObject, TapConsumer, StatefulFeature {
     static let descriptor = FeatureDescriptor(
         id: .autoClose,

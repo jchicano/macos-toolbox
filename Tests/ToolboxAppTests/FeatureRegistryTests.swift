@@ -72,10 +72,10 @@ final class FeatureRegistryTests: XCTestCase {
 
     func testGatingBlocksWithoutPermission() {
         let (registry, store, fakes) = makeRegistry(granted: false)
-        XCTAssertEqual(registry.setEnabled(true, for: .scrollVim), .needsPermission(.accessibility))
+        XCTAssertEqual(registry.setEnabled(true, for: .autoClose), .needsPermission(.accessibility))
         XCTAssertFalse(fakes[2].isRunning)
         XCTAssertEqual(fakes[2].startCount, 0)
-        XCTAssertFalse(store.settings.enabled.contains(.scrollVim))
+        XCTAssertFalse(store.settings.enabled.contains(.autoClose))
     }
 
     func testGatingPassesPermissionlessFeatures() {
@@ -87,7 +87,7 @@ final class FeatureRegistryTests: XCTestCase {
     func testGatingAllowsWhenGranted() {
         let (registry, _, fakes) = makeRegistry(granted: true)
         XCTAssertEqual(registry.setEnabled(true, for: .autoClose), .enabled)
-        XCTAssertTrue(fakes[3].isRunning)
+        XCTAssertTrue(fakes[2].isRunning)
     }
 
     func testRestoreOnLaunchStartsPersistedPermissionless() {
@@ -101,12 +101,12 @@ final class FeatureRegistryTests: XCTestCase {
 
     func testRestoreOnLaunchSkipsRevokedPermission() {
         let store = makeStore()
-        store.update { $0.enabled = [.scrollVim] }
+        store.update { $0.enabled = [.autoClose] }
         let (registry, _, fakes) = makeRegistry(granted: false, store: store)
         registry.restoreOnLaunch()
         XCTAssertFalse(fakes[2].isRunning)
         // The choice stays persisted so the menu can warn (F3).
-        XCTAssertTrue(store.settings.enabled.contains(.scrollVim))
+        XCTAssertTrue(store.settings.enabled.contains(.autoClose))
     }
 
     func testStopAll() {

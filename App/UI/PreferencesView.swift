@@ -21,14 +21,12 @@ struct PreferencesView: View {
                 .tabItem { Label("Breaks", systemImage: "cup.and.saucer") }.tag(1)
             KeepAwakePane(store: store, restart: { restartFeature(.keepAwake) })
                 .tabItem { Label("Keep Awake", systemImage: "bolt") }.tag(2)
-            ScrollVimPane(store: store)
-                .tabItem { Label("Vim Scroll", systemImage: "chevron.up.chevron.down") }.tag(3)
             AutoClosePane(store: store)
-                .tabItem { Label("Auto-close", systemImage: "curlybraces") }.tag(4)
+                .tabItem { Label("Auto-close", systemImage: "curlybraces") }.tag(3)
             SnippetsPane(store: store, snippetStore: snippetStore)
-                .tabItem { Label("Snippets", systemImage: "text.quote") }.tag(5)
+                .tabItem { Label("Snippets", systemImage: "text.quote") }.tag(4)
             ColorPane(store: store)
-                .tabItem { Label("Color", systemImage: "eyedropper") }.tag(6)
+                .tabItem { Label("Color", systemImage: "eyedropper") }.tag(5)
         }
         .padding(16)
         .frame(width: 560, height: 460)
@@ -233,41 +231,6 @@ private struct KeepAwakePane: View {
             .pickerStyle(.radioGroup)
             .labelsHidden()
             Spacer()
-        }
-    }
-}
-
-private struct ScrollVimPane: View {
-    @ObservedObject var store: SettingsStore
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            SettingToggle(title: "Smooth scroll",
-                          help: "Splits the jump into 6 chunks 8 ms apart.",
-                          value: Binding(
-                              get: { store.settings.scrollVim.smooth },
-                              set: { newValue in store.update { settings in settings.scrollVim.smooth = newValue } }
-                          ))
-            HStack {
-                Text("Half-page fraction")
-                Slider(value: Binding(
-                    get: { store.settings.scrollVim.fraction },
-                    set: { newValue in store.update { settings in settings.scrollVim.fraction = newValue } }
-                ), in: 0.1...1.0, step: 0.1)
-                Text("\(Int((store.settings.scrollVim.fraction * 100).rounded()))%")
-                    .frame(width: 44, alignment: .trailing)
-            }
-            SettingToggle(title: "Skip text fields",
-                          help: "Ctrl+D forward-deletes in Cocoa text fields as usual.",
-                          value: Binding(
-                              get: { store.settings.scrollVim.skipTextFields },
-                              set: { newValue in store.update { settings in settings.scrollVim.skipTextFields = newValue } }
-                          ))
-            Text("Application filter").font(.headline)
-            AppFilterEditor(filter: Binding(
-                get: { store.settings.scrollVim.filter },
-                set: { newValue in store.update { settings in settings.scrollVim.filter = newValue } }
-            ))
         }
     }
 }

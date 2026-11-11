@@ -10,7 +10,6 @@ public struct Settings: Codable, Equatable {
 
     public var breaks = BreaksSettings()
     public var keepAwake = KeepAwakeSettings()
-    public var scrollVim = ScrollVimSettings()
     public var autoClose = AutoCloseSettings()
     public var colorPicker = ColorPickerSettings()
     public var snippets = SnippetsSettings()
@@ -41,14 +40,6 @@ public struct Settings: Codable, Equatable {
         public var allowDisplaySleep = false
         /// Nil means indefinite.
         public var defaultDuration: TimeInterval?
-        public init() {}
-    }
-
-    public struct ScrollVimSettings: Codable, Equatable {
-        public var filter = AppFilter(mode: .denylist, bundleIDs: AppFilter.defaultScrollDeny)
-        public var smooth = true
-        public var fraction = 0.5
-        public var skipTextFields = true
         public init() {}
     }
 

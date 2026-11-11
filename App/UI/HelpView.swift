@@ -24,10 +24,6 @@ struct HelpView: View {
                         detail: String(localized: "Prevents display and system sleep via a power assertion.")
                     )
                     HelpRow(
-                        title: String(localized: "Vim Scroll"),
-                        detail: String(localized: "Ctrl+D / Ctrl+U scroll half a page. Needs Accessibility. Skipped in terminals, editors and text fields.")
-                    )
-                    HelpRow(
                         title: String(localized: "Auto-close"),
                         detail: String(localized: "Closes pairs and jumps out with Tab. Needs Accessibility. Disabled in IDEs and password fields.")
                     )
@@ -48,7 +44,7 @@ struct HelpView: View {
                         granted: HelpInfo.accessibilityGranted,
                         hint: HelpInfo.accessibilityGranted
                             ? nil
-                            : String(localized: "Enable a Vim Scroll, Auto-close or Snippets feature to be guided.")
+                            : String(localized: "Enable an Auto-close or Snippets feature to be guided.")
                     )
                     PermissionRow(
                         name: String(localized: "Notifications"),

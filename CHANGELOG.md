@@ -7,19 +7,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.1.0] - 2026-11-10
 
 First MVP release: menu bar app (macOS 12+, universal arm64/x86_64) with
-Breaks, Keep Awake, Vim Scroll, Auto-close, Snippets and Color Picker.
+Breaks, Keep Awake, Auto-close, Snippets and Color Picker.
 Ad-hoc signed, hardened runtime, no sandbox (event taps are incompatible
-with the App Store sandbox). Live verification on Intel is recorded in
-`docs/MANUAL_QA.md`; Accessibility-gated typing QA and notarization remain
-pending (no Developer ID on the build machine).
+with the App Store sandbox). Internal tool: no public distribution, no
+notarization. Live verification on Intel is recorded in
+`docs/MANUAL_QA.md`; Accessibility-gated typing QA remains pending.
+
+### Removed
+- Vim Scroll at user request (internal scope cut): descriptor, feature,
+  poster, settings, preferences tab, help copy, tests and docs updated.
+  `FeatureID.scrollVim` stays as an inert case so old persisted settings
+  still decode.
 
 ### Added
 - F8 packaging: `make-dmg.sh` verified (clean DMG mounts, app only),
-  ad-hoc + hardened runtime confirmed on app and login helper, `notarize.sh`
-  ready (keychain profile pending). `spctl` acceptance + M16 pending
-  Developer ID (expected rejection without notarization).
+  ad-hoc + hardened runtime confirmed on app and login helper. `notarize.sh`
+  stays for the future; no notarization for internal use (M16 out of scope).
 - F7 Preferences + Help: tabbed `PreferencesView` (General, Breaks, Keep
-  Awake, Vim Scroll, Auto-close with pair table, Snippets with editor +
+  Awake, Auto-close with pair table, Snippets with editor +
   import/export, Color) bound to the stores with live effect, shared
   `AppFilterEditor` with `/Applications` picker, complete `HelpView`
   (per-feature docs, AX/notification state, Secure Input note, README link).
@@ -40,16 +45,10 @@ pending (no Developer ID on the build machine).
   denylist, editable-focus gate, dynamic `menuTitle` with active openers).
   Verified live: dynamic title renders; CA-4.x behavior pending AX grant
   (Spanish layout + latency in F9).
-- F4 Vim Scroll: `ScrollVimFeature` (Ctrl+D/U only, denylist + allowlist,
-  Cocoa text-field skip, half-page from cached window frame with 400 pt
-  fallback, virtual event location at window center) + `ScrollPoster` (pixel
-  scroll, 6-chunk smooth mode). 12 unit tests (modifiers, keycodes, filter,
-  text skip, delta sign, center math); live Safari QA pending AX grant (F9
-  M7/M8).
 - F3 input infrastructure: `PermissionsService`, `FrontmostAppTracker`
   (atomic cached bundleID), `FocusedElementCache` (AXObserver role + window
   size, main thread only), shared `EventTapManager` (own thread, on-demand
-  install/destroy, priority Snippets→AutoClose→ScrollVim, synthetic mark,
+  install/destroy, priority Snippets→AutoClose, synthetic mark,
   timeout re-enable, signposts, DEBUG key logger), `TextInserter`/`KeyPoster`
   (marked Unicode/chunked paste), English `PermissionOnboardingView` with 1 s
   grant polling, ⚠️ menu warning for revoked permission. Verified live: ⚠️

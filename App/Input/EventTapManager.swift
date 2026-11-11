@@ -16,7 +16,7 @@ enum TapResult: Equatable {
     case replace([CGEvent])
 }
 
-/// A tap consumer. Lower priority runs first (Snippets → AutoClose → ScrollVim).
+/// A tap consumer. Lower priority runs first (Snippets → Auto-close).
 /// handle runs on the tap thread: O(1), no AX, no I/O, no locks that block.
 protocol TapConsumer: AnyObject {
     var tapPriority: Int { get }

@@ -18,6 +18,11 @@ Cambios respecto a la versión anterior (680 líneas):
 - Hardened runtime desactivado en Debug (los bundles de tests no cargan con ad-hoc + runtime); activo en Release.
 - Firma ad-hoc; notarización pendiente de Developer ID. QA manual solo en Intel.
 
+### Decisiones de producto — 2026-11-11 (Jay)
+- **Herramienta interna, sin distribución pública**: no se publica, no hay membresía Apple. Firma ad-hoc permanente; notarización y M16 quedan fuera de alcance (no pendientes).
+- Cada rebuild ad-hoc invalida la concesión de Accesibilidad: hay que re-añadir la app en Ajustes.
+- **Vim Scroll eliminado** a petición del usuario (descriptor, feature, settings, prefs, tests). `FeatureID.scrollVim` se conserva como caso inerte para decodificar settings antiguos.
+
 ---
 
 ## 0. Resumen

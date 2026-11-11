@@ -2,7 +2,6 @@
 "Quit Toolbox" = "Quit Toolbox";
 "Breaks" = "Breaks";
 "Keep Awake" = "Keep Awake";
-"Vim Scroll" = "Vim Scroll";
 "Auto-close" = "Auto-close";
 "Snippets" = "Snippets";
 "Color Picker" = "Color Picker";
@@ -44,13 +43,12 @@
 "Search snippets" = "Search snippets";
 "Copied — paste it yourself" = "Copied — paste it yourself";
 "Permissions" = "Permissions";
-"Enable a Vim Scroll, Auto-close or Snippets feature to be guided." = "Enable a Vim Scroll, Auto-close or Snippets feature to be guided.";
+"Enable an Auto-close or Snippets feature to be guided." = "Enable an Auto-close or Snippets feature to be guided.";
 "Enable Breaks to be asked." = "Enable Breaks to be asked.";
 "Secure Input is on — key features stay silent in password fields." = "Secure Input is on — key features stay silent in password fields.";
 "README and source code" = "README and source code";
 "Reminds you to take a break. Needs notification permission when enabled." = "Reminds you to take a break. Needs notification permission when enabled.";
 "Prevents display and system sleep via a power assertion." = "Prevents display and system sleep via a power assertion.";
-"Ctrl+D / Ctrl+U scroll half a page. Needs Accessibility. Skipped in terminals, editors and text fields." = "Ctrl+D / Ctrl+U scroll half a page. Needs Accessibility. Skipped in terminals, editors and text fields.";
 "Closes pairs and jumps out with Tab. Needs Accessibility. Disabled in IDEs and password fields." = "Closes pairs and jumps out with Tab. Needs Accessibility. Disabled in IDEs and password fields.";
 "Expands short triggers into text, or insert from the menu. Needs Accessibility for expansion." = "Expands short triggers into text, or insert from the menu. Needs Accessibility for expansion.";
 "Copies the color under the cursor. Never asks for Screen Recording." = "Copies the color under the cursor. Never asks for Screen Recording.";

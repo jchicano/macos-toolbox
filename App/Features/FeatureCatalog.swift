@@ -22,32 +22,25 @@ enum FeatureCatalog {
             menuOrder: 1
         ),
         FeatureDescriptor(
-            id: .scrollVim,
-            titleKey: "Vim Scroll",
-            kind: .toggle,
-            requiredPermissions: [.accessibility],
-            menuOrder: 2
-        ),
-        FeatureDescriptor(
             id: .autoClose,
             titleKey: "Auto-close",
             kind: .toggle,
             requiredPermissions: [.accessibility],
-            menuOrder: 3
+            menuOrder: 2
         ),
         FeatureDescriptor(
             id: .snippets,
             titleKey: "Snippets",
             kind: .toggle,
             requiredPermissions: [.accessibility],
-            menuOrder: 4
+            menuOrder: 3
         ),
         FeatureDescriptor(
             id: .colorPicker,
             titleKey: "Color Picker",
             kind: .action,
             requiredPermissions: [],
-            menuOrder: 5
+            menuOrder: 4
         ),
     ]
 
