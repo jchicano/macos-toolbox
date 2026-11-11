@@ -48,6 +48,13 @@ final class EventTapManager {
         dispatch(type: type, event: event) == nil
     }
 
+    /// Trust check used before re-enabling a disabled tap. Injected in tests.
+    var isTrusted: () -> Bool = PermissionsService.isAccessibilityTrusted
+
+    /// Fired when the tap is torn down because permission was revoked.
+    /// The owner should stop features cleanly (persisted toggles are kept).
+    var onPermissionLost: (() -> Void)?
+
     init(
         tracker: FrontmostAppTracker,
         focusCache: FocusedElementCache,
@@ -158,8 +165,16 @@ final class EventTapManager {
         os_log("tap destroyed", log: tapLog, type: .info)
     }
 
-    /// Re-enables a tap disabled by timeout or user input. Safe with no tap.
+    /// Handles a tap disabled by timeout or user input. Safe with no tap.
+    /// Never fights a permission revocation: without trust the tap is torn
+    /// down instead of re-enabled (re-enabling in a loop stalls event flow).
     func handleTapDisabled() {
+        guard isTrusted() else {
+            os_log("tap disabled and permission revoked; uninstalling", log: tapLog, type: .info)
+            uninstall()
+            onPermissionLost?()
+            return
+        }
         os_log("tap disabled by timeout/input; re-enabling", log: tapLog, type: .info)
         let currentTap: CFMachPort? = lock.synchronized { tap }
         if let currentTap {

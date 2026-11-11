@@ -99,6 +99,7 @@ final class EventTapManagerTests: XCTestCase {
         // With a stub port, install succeeds headless; the timeout path runs.
         var disabledCalls = 0
         let (manager, _, _) = makeManager(factory: { _, _, _ in dummyPort() })
+        manager.isTrusted = { true }
         let consumer = FakeConsumer(priority: 1)
         manager.addConsumer(consumer)
         XCTAssertTrue(manager.isInstalled)
@@ -108,6 +109,24 @@ final class EventTapManagerTests: XCTestCase {
         XCTAssertEqual(disabledCalls, 1)
         manager.removeConsumer(consumer)
         XCTAssertFalse(manager.isInstalled)
+    }
+
+    func testDisabledTapUninstallsWhenUntrusted() {
+        // Revoked permission: tear down instead of re-enabling in a loop
+        // (that loop stalls system event flow).
+        let (manager, _, _) = makeManager(factory: { _, _, _ in dummyPort() })
+        manager.isTrusted = { false }
+        var lostCount = 0
+        manager.onPermissionLost = { lostCount += 1 }
+        let consumer = FakeConsumer(priority: 1)
+        manager.addConsumer(consumer)
+        XCTAssertTrue(manager.isInstalled)
+        XCTAssertFalse(manager.testDispatch(type: .tapDisabledByTimeout, event: keyDownEvent()))
+        XCTAssertFalse(manager.isInstalled)
+        XCTAssertEqual(lostCount, 1)
+        // Consumers stay registered; a later start() reinstalls the tap.
+        XCTAssertEqual(manager.consumerCount, 1)
+        manager.removeConsumer(consumer)
     }
 
     func testTapThreadSurvivesInstall() {

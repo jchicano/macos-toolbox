@@ -62,6 +62,13 @@ final class StatusItemController {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         configureButton()
 
+        tapManager.onPermissionLost = { [weak self] in
+            // Permission revoked (or never granted): release everything now
+            // instead of fighting the system by re-enabling the tap.
+            // Persisted toggles stay; the menu shows the ⚠️ warning.
+            self?.registry.stopAll()
+        }
+
         registry.restoreOnLaunch()
         loginItems.applyStored()
         rebuildMenu()
