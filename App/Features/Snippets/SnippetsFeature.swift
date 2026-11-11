@@ -112,17 +112,6 @@ final class SnippetsFeature: NSObject, TapConsumer, StatefulFeature {
         }
         refreshEngine()
         let chars = AutoCloseFeature.unicodeString(for: event)
-        #if DEBUG
-        if type == .keyDown {
-            let stream = "chars=\(chars) keycode=\(keyCode) bundle=\(bundleID ?? "?")"
-            FileManager.default.createFile(atPath: "/tmp/toolbox-debug.log", contents: nil)
-            if let h = FileHandle(forWritingAtPath: "/tmp/toolbox-debug.log") {
-                h.seekToEndOfFile()
-                h.write(("SNIP keydown " + stream + "\n").data(using: .utf8)!)
-                h.closeFile()
-            }
-        }
-        #endif
         guard chars.count == 1, let char = chars.first else { return .pass }
         guard let match = engine.input(char) else { return .pass }
         // In immediate mode the triggering char belongs to the trigger itself.
