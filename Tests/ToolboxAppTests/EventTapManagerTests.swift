@@ -110,6 +110,19 @@ final class EventTapManagerTests: XCTestCase {
         XCTAssertFalse(manager.isInstalled)
     }
 
+    func testTapThreadSurvivesInstall() {
+        // Regression: the tap thread must not die before servicing the tap
+        // (CFRunLoopRun on an empty runloop returns immediately).
+        let (manager, _, _) = makeManager(factory: { _, _, _ in dummyPort() })
+        let consumer = FakeConsumer(priority: 1)
+        manager.addConsumer(consumer)
+        XCTAssertTrue(manager.isInstalled)
+        Thread.sleep(forTimeInterval: 0.3)
+        XCTAssertTrue(manager.tapThreadIsRunning)
+        manager.removeConsumer(consumer)
+        XCTAssertFalse(manager.isInstalled)
+    }
+
     func testDestroyWithoutTapIsSafe() {
         // No permission here: add/remove must not crash and tap stays down.
         let (manager, _, _) = makeManager()

@@ -76,6 +76,11 @@ final class EventTapManager {
         lock.synchronized { tap != nil }
     }
 
+    /// Test seam: the tap thread must stay alive while installed.
+    var tapThreadIsRunning: Bool {
+        lock.synchronized { thread?.isExecuting ?? false }
+    }
+
     func addConsumer(_ consumer: any TapConsumer) {
         lock.synchronized {
             if !_consumers.contains(where: { $0 === consumer }) {
@@ -110,23 +115,25 @@ final class EventTapManager {
     }
 
     private func install() {
-        let thread = TapThread()
-        thread.start()
-        guard thread.waitForRunLoop(timeout: 1.0),
-              let runLoop = thread.runLoop
-        else {
-            os_log("tap install failed: no runloop", log: tapLog, type: .error)
-            return
-        }
         let consumerCount = consumerCount
         let selfPointer = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
         guard let tap = tapFactory(Self.eventsOfInterest, tapCallback, selfPointer) else {
             os_log("tap install failed: tapCreate returned nil (missing permission?)", log: tapLog, type: .error)
-            CFRunLoopStop(runLoop)
             return
         }
         let source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
-        CFRunLoopAddSource(runLoop, source, .commonModes)
+        // The thread adds the source BEFORE running the loop: CFRunLoopRun
+        // on an empty runloop returns immediately and the thread would die,
+        // leaving an installed-but-deaf tap.
+        let thread = TapThread { runLoop in
+            CFRunLoopAddSource(runLoop, source, .commonModes)
+        }
+        thread.start()
+        guard thread.waitForRunLoop(timeout: 1.0), thread.runLoop != nil else {
+            os_log("tap install failed: tap thread did not start", log: tapLog, type: .error)
+            CFMachPortInvalidate(tap)
+            return
+        }
         lock.synchronized {
             self.tap = tap
             self.runLoopSource = source
@@ -200,14 +207,23 @@ private func tapCallback(
     return manager.dispatch(type: type, event: event)
 }
 
-/// Dedicated thread hosting the tap's runloop.
+/// Dedicated thread hosting the tap's runloop. The setup block runs on the
+/// thread before the loop starts, so the tap source is always installed first.
 private final class TapThread: Thread {
+    private let setup: (CFRunLoop) -> Void
     private(set) var runLoop: CFRunLoop?
     private let ready = NSCondition()
 
+    init(setup: @escaping (CFRunLoop) -> Void) {
+        self.setup = setup
+        super.init()
+    }
+
     override func main() {
+        let current = CFRunLoopGetCurrent()!
+        setup(current)
         ready.lock()
-        runLoop = CFRunLoopGetCurrent()
+        runLoop = current
         ready.signal()
         ready.unlock()
         CFRunLoopRun()
