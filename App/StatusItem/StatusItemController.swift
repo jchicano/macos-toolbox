@@ -24,6 +24,11 @@ final class StatusItemController {
     private var preferencesWindow: NSWindow?
     private var onboardingWindow: NSWindow?
     private var pendingOnboardingID: FeatureID?
+    private var didPromptForAccessibility = false
+    private lazy var permissionMonitor = PermissionMonitor(
+        isTrusted: PermissionsService.isAccessibilityTrusted,
+        onGranted: { [weak self] in self?.permissionGranted() }
+    )
 
     init(
         store: SettingsStore? = nil,
@@ -67,11 +72,15 @@ final class StatusItemController {
             // instead of fighting the system by re-enabling the tap.
             // Persisted toggles stay; the menu shows the ⚠️ warning.
             self?.registry.stopAll()
+            // A re-grant applies to this running process; watch for it so the
+            // features resume without a relaunch.
+            self?.watchForPermissionIfNeeded()
         }
 
         registry.restoreOnLaunch()
         loginItems.applyStored()
         rebuildMenu()
+        resumeWhenPermissionIsGranted()
 
         // Rebuild the menu whenever the registry state changes.
         registry.$generation
@@ -82,6 +91,7 @@ final class StatusItemController {
 
     /// Stops every feature. Called from applicationWillTerminate.
     func shutdown() {
+        permissionMonitor.stop()
         registry.stopAll()
     }
 
@@ -145,10 +155,14 @@ final class StatusItemController {
     }
 
     private func showOnboarding(for id: FeatureID) {
+        // Makes macOS add Toolbox to Privacy & Security › Accessibility by
+        // itself, so the user only has to flip the switch (no "+" needed).
+        promptForAccessibilityOnce()
+        permissionMonitor.start()
         let view = PermissionOnboardingView(
             featureTitle: onboardingTitle(for: id),
             onGranted: { [weak self] in self?.onboardingGranted() },
-            onDismiss: { [weak self] in self?.closeOnboarding() }
+            onDismiss: { [weak self] in self?.dismissOnboarding() }
         )
         if let window = onboardingWindow {
             window.contentViewController = NSHostingController(rootView: view)
@@ -165,16 +179,61 @@ final class StatusItemController {
     }
 
     private func onboardingGranted() {
+        permissionGranted()
+    }
+
+    /// Called as soon as Accessibility becomes available in the running app.
+    /// Starts the feature the user asked for (if any) and every other persisted
+    /// feature, so no relaunch or extra toggle is needed.
+    private func permissionGranted() {
+        permissionMonitor.stop()
         if let id = pendingOnboardingID {
             _ = registry.setEnabled(true, for: id)
-            pendingOnboardingID = nil
         }
         closeOnboarding()
+        registry.startPersistedFeatures()
+        rebuildMenu()
+    }
+
+    /// The system prompt adds the app to the Accessibility list. At most once
+    /// per launch, and never while running tests.
+    private func promptForAccessibilityOnce() {
+        guard !didPromptForAccessibility,
+              !PermissionsService.isRunningTests,
+              !PermissionsService.isAccessibilityTrusted() else { return }
+        didPromptForAccessibility = true
+        _ = PermissionsService.requestAccessibilityTrust()
+    }
+
+    /// Watches for a grant while persisted features are waiting for it
+    /// (first launch, revoked permission, or a rebuild that invalidated the
+    /// ad-hoc grant).
+    private func resumeWhenPermissionIsGranted() {
+        guard !PermissionsService.isRunningTests,
+              !PermissionsService.isAccessibilityTrusted(),
+              !registry.missingPermissionFeatures().isEmpty else { return }
+        promptForAccessibilityOnce()
+        permissionMonitor.start()
     }
 
     private func closeOnboarding() {
         pendingOnboardingID = nil
         onboardingWindow?.close()
+    }
+
+    /// "Not Now": stop polling unless some persisted feature is still waiting
+    /// for the permission (then the menu warning keeps watching).
+    private func dismissOnboarding() {
+        closeOnboarding()
+        if registry.missingPermissionFeatures().isEmpty {
+            permissionMonitor.stop()
+        }
+    }
+
+    /// Polls for a grant only while a persisted feature actually needs it.
+    private func watchForPermissionIfNeeded() {
+        guard !registry.missingPermissionFeatures().isEmpty else { return }
+        permissionMonitor.start()
     }
 
     // MARK: - Help and Preferences (full versions land in F7)

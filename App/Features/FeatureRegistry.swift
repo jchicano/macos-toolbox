@@ -126,9 +126,17 @@ final class FeatureRegistry: ObservableObject {
     /// Starts every persisted feature whose permissions are granted.
     /// Permission-gated features stay persisted but stopped until granted (F3 warns in the menu).
     func restoreOnLaunch() {
+        startPersistedFeatures()
+    }
+
+    /// Starts persisted-enabled features that are not running yet. Called at
+    /// launch and again when Accessibility is granted while the app is running,
+    /// so a grant never needs a relaunch.
+    func startPersistedFeatures() {
         for descriptor in FeatureCatalog.all where store.settings.enabled.contains(descriptor.id) {
             guard missingPermission(for: descriptor) == nil,
-                  let feature = features[descriptor.id]
+                  let feature = features[descriptor.id],
+                  !feature.isRunning
             else { continue }
             try? feature.start()
         }

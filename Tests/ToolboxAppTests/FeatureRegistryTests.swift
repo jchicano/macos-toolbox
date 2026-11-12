@@ -118,6 +118,37 @@ final class FeatureRegistryTests: XCTestCase {
         XCTAssertFalse(fakes[1].isRunning)
     }
 
+    func testStartPersistedFeaturesResumesAfterGrant() {
+        let store = makeStore()
+        store.update { $0.enabled = [.autoClose, .snippets] }
+        var granted = false
+        let fakes = FeatureCatalog.all.map { FakeFeature(descriptor: $0) }
+        let registry = FeatureRegistry(
+            features: fakes,
+            store: store,
+            isAccessibilityGranted: { granted }
+        )
+
+        registry.restoreOnLaunch()
+        XCTAssertFalse(fakes[2].isRunning)
+        XCTAssertFalse(fakes[3].isRunning)
+
+        // The user grants Accessibility in System Settings while the app runs.
+        granted = true
+        registry.startPersistedFeatures()
+        XCTAssertTrue(fakes[2].isRunning)
+        XCTAssertTrue(fakes[3].isRunning)
+    }
+
+    func testStartPersistedFeaturesSkipsRunningFeatures() {
+        let store = makeStore()
+        store.update { $0.enabled = [.breaks] }
+        let (registry, _, fakes) = makeRegistry(store: store)
+        registry.startPersistedFeatures()
+        registry.startPersistedFeatures()
+        XCTAssertEqual(fakes[0].startCount, 1)
+    }
+
     func testRestartRestartsEnabledFeature() {
         let (registry, _, fakes) = makeRegistry()
         _ = registry.setEnabled(true, for: .breaks)

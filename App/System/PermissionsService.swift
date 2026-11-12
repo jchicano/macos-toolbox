@@ -10,6 +10,12 @@ import Foundation
 /// Reads permission states and opens Settings. Never prompts except through
 /// AXIsProcessTrustedWithOptions when explicitly asked.
 enum PermissionsService {
+    /// True while the app is running as an XCTest host. Tests must not trigger
+    /// system permission prompts or start real taps.
+    static var isRunningTests: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
+
     /// Non-prompting check used for menu state and gating.
     static func isAccessibilityTrusted() -> Bool {
         AXIsProcessTrusted()

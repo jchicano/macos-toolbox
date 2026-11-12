@@ -16,7 +16,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | M9 | Auto-close: CA-4.1–4.7 in TextEdit, Notes, Slack, browser text fields | ☑ (TextEdit full pass incl. Tab-out/overtype/backspace; other apps pending) | ☐ |
 | M10 | Auto-close with Spanish – ISO layout | ☑ (`¿?`, quotes, backtick pair verified; dead-key ` remains pass-through by design) | ☐ |
 | M11 | Auto-close inactive in VS Code, Xcode, Terminal, password fields | ☑ (VS Code + Terminal verified; password fields by design) | ☐ |
-| M12 | Revoke Accessibility while running → ⚠️ menu warning, input not blocked | ☑ (no freeze after fix; ⚠️ shown; typing unaffected) | ☐ |
+| M12 | Revoke Accessibility while running → ⚠️ menu warning, input not blocked; re-grant resumes without relaunch | ☑ (no freeze after fix; ⚠️ shown; typing unaffected; monitor resumes on grant) | ☐ |
 | M13 | Sleep/wake: event tap still works, timers rescheduled | ☐ | ☐ |
 | M14 | Activity Monitor: < 30 MB, ~0% CPU idle with all features on | ☑ (22–26 MB RSS, 1 feature) | ☐ |
 | M15 | Quit: no assertions or processes left | ☑ | ☐ |

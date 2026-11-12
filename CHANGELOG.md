@@ -13,6 +13,13 @@ with the App Store sandbox). Internal tool: no public distribution, no
 notarization. Live verification on Intel is recorded in
 `docs/MANUAL_QA.md`; Accessibility-gated typing QA remains pending.
 
+### Added
+- Accessibility onboarding no longer needs manual setup: the system prompt
+  adds Toolbox to Privacy & Security › Accessibility by itself, and a
+  permission monitor starts the persisted features as soon as the switch is
+  turned on. No relaunch and no extra toggle are needed after granting (or
+  re-granting after a rebuild).
+
 ### Removed
 - Vim Scroll at user request (internal scope cut): descriptor, feature,
   poster, settings, preferences tab, help copy, tests and docs updated.
