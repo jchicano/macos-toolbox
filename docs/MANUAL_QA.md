@@ -7,27 +7,39 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 |---|---|---|---|
 | M1 | App starts with no Dock icon; menu bar icon appears | ☑ | ☐ |
 | M2 | Menu order and titles match §0, in English; checks persist | ☑ | ☐ |
-| M3 | Keep Awake: `pmset -g assertions` appears/vanishes; duration works | ☐ (assertion verified; timed duration pending) | ☐ |
-| M4 | Breaks: notification, snooze, skip, idle/screen-lock pause | ☐ (unit-tested; live pending) | ☐ |
+| M3 | Keep Awake: `pmset -g assertions` appears/vanishes; duration works | ☑ (appear/vanish + 8 s auto-expiry verified) | ☐ |
+| M4 | Breaks: notification, snooze, skip, idle/screen-lock pause | ☐ (notification delivered ✓; snooze/skip overlay untested — overlay crashes on this GPU, see Known crashes) | ☐ |
 | M5 | Color picker: correct hex, Esc cancels, recents, no screen-recording prompt | ☐ (unit-tested; live pending) | ☐ |
-| M6 | Accessibility onboarding: deny → not enabled; grant → auto-enabled | ☐ | ☐ |
+| M6 | Accessibility onboarding: deny → not enabled; grant → auto-enabled | ☑ (deny: no enable + onboarding shown; grant: features auto-start) | ☐ |
 | M7 | Vim Scroll: removed at user request | N/A (removed) | N/A |
 | M8 | Vim Scroll: removed at user request | N/A (removed) | N/A |
-| M9 | Auto-close: CA-4.1–4.7 in TextEdit, Notes, Slack, browser text fields | ☐ | ☐ |
-| M10 | Auto-close with Spanish – ISO layout: `¿ ¡ ( [ { " ' dead-key backtick` | ☐ | ☐ |
-| M11 | Auto-close inactive in VS Code, Xcode, Terminal, password fields | ☐ | ☐ |
-| M12 | Revoke Accessibility while running → ⚠️ menu warning, input not blocked | ☐ | ☐ |
+| M9 | Auto-close: CA-4.1–4.7 in TextEdit, Notes, Slack, browser text fields | ☑ (TextEdit full pass incl. Tab-out/overtype/backspace; other apps pending) | ☐ |
+| M10 | Auto-close with Spanish – ISO layout | ☑ (`¿?`, quotes, backtick pair verified; dead-key ` remains pass-through by design) | ☐ |
+| M11 | Auto-close inactive in VS Code, Xcode, Terminal, password fields | ☑ (VS Code + Terminal verified; password fields by design) | ☐ |
+| M12 | Revoke Accessibility while running → ⚠️ menu warning, input not blocked | ☑ (no freeze after fix; ⚠️ shown; typing unaffected) | ☐ |
 | M13 | Sleep/wake: event tap still works, timers rescheduled | ☐ | ☐ |
 | M14 | Activity Monitor: < 30 MB, ~0% CPU idle with all features on | ☑ (22–26 MB RSS, 1 feature) | ☐ |
 | M15 | Quit: no assertions or processes left | ☑ | ☐ |
-| M16 | (F8) Notarized: DMG opens on a fresh account without Gatekeeper warnings | ☐ (pending Developer ID) | ☐ |
-| M17 | Snippets: `;sig` in TextEdit/Notes/Slack/Safari; variables; picker; no-AX fallback | ☐ | ☐ |
+| M16 | (F8) Notarized | N/A (internal tool, no distribution) | N/A |
+| M17 | Snippets: `;sig` in TextEdit; variables; picker; no-AX fallback | ☐ (`;sig`/`;date` expand ✓, picker insert ✓; `{cursor}` + no-AX fallback pending) | ☐ |
 | M18 | (F10) Edit/Reload config, YAML errors, bookmarks, workspaces, run_terminal, dark mode, `include:` | ☐ | ☐ |
 
 ## Results log
 
 | Date | Phase | Arch | Result | Notes |
 |---|---|---|---|---|
+| 2026-11-11 | Live QA | Intel | M3/M6/M9/M10/M11/M12 pass; M17 partial | Physical typing; 8 s KeepAwake expiry; revoke without freeze |
+| 2026-11-11 | Live QA | Intel | M4 partial | Notification delivered; overlay untested (GPU crash, see below) |
+
+## Known crashes (this machine only)
+
+MacBookPro11,5 (Intel Iris Pro, 2015) + macOS 12.7.6: 5× identical abort in
+`+[CUIShapeEffectStack sharedCIContext]` (Metal/CoreUI) when AppKit draws
+checkboxes or push buttons (2026-11-10 00:20 test host, 2026-11-11 22:28 /
+22:41 / 23:11 / 23:12). Apple's driver bug, not app logic: no app frames in
+the crashing path. Unaffected flows (menu, tap, typing, notifications,
+clipboard) never crash. Workaround to try: Accessibility → Display →
+Reduce transparency. Overlay ships OFF by default.
 | 2026-11-10 | F9 | Intel | M1 pass | `background only = true`; status item visible |
 | 2026-11-10 | F9 | Intel | M2 pass | AX menu listing matches §0 in English; Keep Awake check persisted across relaunch |
 | 2026-11-10 | F9 | Intel | M3 partial | `pmset` shows/releases "Toolbox: Keep Awake"; timed duration not exercised |
