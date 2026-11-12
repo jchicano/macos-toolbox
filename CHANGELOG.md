@@ -20,6 +20,11 @@ notarization. Live verification on Intel is recorded in
   still decode.
 
 ### Fixed
+- Crash while drawing checkboxes and push buttons (Preferences → Breaks,
+  break overlay → Skip): `CFBundleVersion` was a number in Info.plist and
+  the Intel graphics telemetry passes it to `CFStringGetCString`, throwing
+  inside `dispatch_once` and aborting the app. It is now the required
+  string; `InfoPlistTests` guards the type.
 - Revoked-permission freeze: the tap no longer re-enables itself when
   Accessibility is gone (that fight stalled system event flow). On revoke it
   uninstalls and stops features cleanly; persisted toggles and the ⚠️

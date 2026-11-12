@@ -21,7 +21,7 @@ Cambios respecto a la versión anterior (680 líneas):
 ### Notas de QA en vivo — 2026-11-11/12 (teclado físico, Intel)
 - Tap + Auto-close + Snippets verificados con teclado real (System Events `keystroke` no atraviesa el tap: limitación del harness, no de la app).
 - Revocar el permiso congelaba el sistema (re-enable en bucle) → corregido: sin permiso se desinstala el tap y se para limpio (M12 verificado).
-- 5× abort idéntico de Metal/CoreUI (`sharedCIContext`) al dibujar checkboxes/botones: bug del driver Intel Iris 2015 + macOS 12, fuera del código de la app. Probar "Reducir transparencia". Overlay va OFF por defecto.
+- Abortos al dibujar checkboxes/botones (Preferencias, overlay Skip): causa real = `CFBundleVersion` numérico en Info.plist. La telemetría del driver Intel lo pasa a `CFStringGetCString` y lanza una excepción dentro de `dispatch_once` → aborto. Corregido a string; test `InfoPlistTests` lo protege. Reproducido 6/6 con bundle mínimo (entero) y 0/6 (string).
 
 ### Decisiones de producto — 2026-11-11 (Jay)
 - **Herramienta interna, sin distribución pública**: no se publica, no hay membresía Apple. Firma ad-hoc permanente; notarización y M16 quedan fuera de alcance (no pendientes).
