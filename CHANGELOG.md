@@ -11,7 +11,8 @@ Breaks, Keep Awake, Auto-close, Snippets and Color Picker.
 Ad-hoc signed, hardened runtime, no sandbox (event taps are incompatible
 with the App Store sandbox). Internal tool: no public distribution, no
 notarization. Live verification on Intel is recorded in
-`docs/MANUAL_QA.md`; Accessibility-gated typing QA remains pending.
+`docs/MANUAL_QA.md`; Accessibility-gated typing is verified on Intel with a
+physical keyboard.
 
 ### Added
 - Accessibility onboarding no longer needs manual setup: the system prompt

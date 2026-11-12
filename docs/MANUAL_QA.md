@@ -37,6 +37,8 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | 2026-11-12 | Live QA | Intel | M4 pass (overlay) | Overlay renders; Skip and Snooze both verified |
 | 2026-11-12 | Live QA | Intel | M17 pass | `;cur` + space + `X` → `aXb` |
 | 2026-11-12 | Regression | Intel | Checkbox/button abort fixed | Numeric `CFBundleVersion`; see below |
+| 2026-11-13 | Live QA | Intel | M12 pass (auto-resume) | System prompt listed the app; enabling the switch started Auto-close + Snippets in the running app, no relaunch |
+| 2026-11-13 | Live QA | Intel | M17 pass (typing) | `(` → `()` in TextEdit after the self-service grant |
 
 ## Fixed: abort while drawing checkboxes and buttons (2026-11-12)
 
