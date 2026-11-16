@@ -9,7 +9,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | M2 | Menu order and titles match §0, in English; checks persist | ☑ | ☐ |
 | M3 | Keep Awake: `pmset -g assertions` appears/vanishes; duration works | ☑ (appear/vanish + 8 s auto-expiry verified) | ☐ |
 | M4 | Breaks: notification, snooze, skip, idle/screen-lock pause | ☑ (notification ✓; overlay Skip + Snooze verified 2026-11-12; idle/lock pause unit-tested) | ☐ |
-| M5 | Color picker: correct hex, Esc cancels, recents, no screen-recording prompt | ☐ (loupe ✓, Esc ✓, formats ✓, recents ✓, no Screen Recording ✓; pixel sample pending one physical click) | ☐ |
+| M5 | Color picker: correct hex, Esc cancels, recents, no screen-recording prompt | ☑ (loupe ✓, Esc ✓, formats ✓, recents ✓, no Screen Recording ✓; `#EEEEEE` sampled and copied) | ☐ |
 | M6 | Accessibility onboarding: deny → not enabled; grant → auto-enabled | ☑ (deny: no enable + onboarding shown; grant: features auto-start) | ☐ |
 | M7 | Vim Scroll: removed at user request | N/A (removed) | N/A |
 | M8 | Vim Scroll: removed at user request | N/A (removed) | N/A |
@@ -42,6 +42,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | 2026-11-16 | Live QA | Intel | M14 pass (all features) | 16.8 MB RSS, 0.0% CPU idle; Keep Awake assertion visible in `pmset` |
 | 2026-11-16 | Live QA | Intel | M5 partial | Loupe shows, Esc cancels, formats and recents work; found and fixed the unreachable Color Picker action |
 | 2026-11-16 | Live QA | Intel | M5 bug fixed | AppKit skips the action of an item with a submenu; sampler must be retained and the app activated |
+| 2026-11-16 | Live QA | Intel | M5 pass | Physical click sampled `#EEEEEE`; copied to the clipboard and added to Recent |
 
 ## Fixed: abort while drawing checkboxes and buttons (2026-11-12)
 
