@@ -4,6 +4,9 @@
 
 import AppKit
 import ToolboxCore
+import os
+
+private let pickLog = OSLog(subsystem: "com.jchicano.toolbox", category: "colorpicker")
 
 /// Momentary action feature: every run opens the sampler once.
 final class ColorPickerAction: NSObject, Feature {
@@ -19,6 +22,9 @@ final class ColorPickerAction: NSObject, Feature {
     private(set) var isRunning = false
 
     private let store: SettingsStore
+    /// Retained while the sampler is on screen: a temporary instance can be
+    /// deallocated before AppKit presents the loupe, so nothing shows up.
+    private var sampler: NSColorSampler?
 
     init(store: SettingsStore) {
         self.store = store
@@ -34,8 +40,20 @@ final class ColorPickerAction: NSObject, Feature {
     }
 
     private func pick() {
-        NSColorSampler().show { [weak self] color in
-            guard let self, let color else { return }
+        os_log("sampler requested", log: pickLog, type: .info)
+        // The menu bar item does not activate the app; the sampler is a system
+        // UI and needs an active app to present its overlay.
+        NSApp.activate(ignoringOtherApps: true)
+        let sampler = NSColorSampler()
+        self.sampler = sampler
+        sampler.show { [weak self] color in
+            guard let self else { return }
+            self.sampler = nil
+            guard let color else {
+                os_log("sampler cancelled", log: pickLog, type: .info)
+                return
+            }
+            os_log("sampler returned a color", log: pickLog, type: .info)
             self.copy(color: color)
         }
     }
@@ -51,6 +69,7 @@ final class ColorPickerAction: NSObject, Feature {
             as: store.settings.colorPicker.format,
             uppercaseHex: store.settings.colorPicker.uppercase
         )
+        os_log("copied %{public}@", log: pickLog, type: .info, value)
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(value, forType: .string)
@@ -69,6 +88,17 @@ final class ColorPickerAction: NSObject, Feature {
 
     func makeSubmenu() -> NSMenu? {
         let menu = NSMenu()
+        // AppKit does not send an item's action when it has a submenu, so the
+        // sampler lives here as the first entry instead of on the parent item.
+        let pick = NSMenuItem(
+            title: NSLocalizedString("Pick Color…", comment: ""),
+            action: #selector(pickColor(_:)),
+            keyEquivalent: ""
+        )
+        pick.target = self
+        menu.addItem(pick)
+        menu.addItem(.separator())
+
         let formatItem = NSMenuItem(title: NSLocalizedString("Format", comment: ""), action: nil, keyEquivalent: "")
         let formatMenu = NSMenu()
         let formats: [(ColorFormat, String)] = [
@@ -103,6 +133,10 @@ final class ColorPickerAction: NSObject, Feature {
             menu.addItem(recentsItem)
         }
         return menu
+    }
+
+    @objc private func pickColor(_: NSMenuItem) {
+        pick()
     }
 
     @objc private func pickFormat(_ sender: NSMenuItem) {

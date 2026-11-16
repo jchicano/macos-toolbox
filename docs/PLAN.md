@@ -22,6 +22,7 @@ Cambios respecto a la versión anterior (680 líneas):
 - Tap + Auto-close + Snippets verificados con teclado real (System Events `keystroke` no atraviesa el tap: limitación del harness, no de la app).
 - Revocar el permiso congelaba el sistema (re-enable en bucle) → corregido: sin permiso se desinstala el tap y se para limpio (M12 verificado).
 - Abortos al dibujar checkboxes/botones (Preferencias, overlay Skip): causa real = `CFBundleVersion` numérico en Info.plist. La telemetría del driver Intel lo pasa a `CFStringGetCString` y lanza una excepción dentro de `dispatch_once` → aborto. Corregido a string; test `InfoPlistTests` lo protege. Reproducido 6/6 con bundle mínimo (entero) y 0/6 (string).
+- Color Picker: AppKit **no dispara la acción** de un ítem que tiene submenú, así que la lupa era inalcanzable. La acción pasa a `Pick Color…`, primera entrada del submenú. Además `NSColorSampler` debe retenerse (una instancia temporal se libera antes de mostrar la UI) y la app debe activarse antes de mostrarlo. Verificado: lupa visible, Esc cancela sin tocar el portapapeles, formatos y recientes OK. M5 queda pendiente solo del clic físico en un píxel.
 
 ### Decisiones de producto — 2026-11-11 (Jay)
 - **Herramienta interna, sin distribución pública**: no se publica, no hay membresía Apple. Firma ad-hoc permanente; notarización y M16 quedan fuera de alcance (no pendientes).

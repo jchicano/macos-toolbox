@@ -38,6 +38,7 @@
 "Format" = "Format";
 "Recent" = "Recent";
 "Copied %@" = "Copied %@";
+"Pick Color…" = "Pick Color…";
 "Insert Snippet…" = "Insert Snippet…";
 "Insert Snippet" = "Insert Snippet";
 "Search snippets" = "Search snippets";

@@ -9,7 +9,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | M2 | Menu order and titles match §0, in English; checks persist | ☑ | ☐ |
 | M3 | Keep Awake: `pmset -g assertions` appears/vanishes; duration works | ☑ (appear/vanish + 8 s auto-expiry verified) | ☐ |
 | M4 | Breaks: notification, snooze, skip, idle/screen-lock pause | ☑ (notification ✓; overlay Skip + Snooze verified 2026-11-12; idle/lock pause unit-tested) | ☐ |
-| M5 | Color picker: correct hex, Esc cancels, recents, no screen-recording prompt | ☐ (unit-tested; live pending) | ☐ |
+| M5 | Color picker: correct hex, Esc cancels, recents, no screen-recording prompt | ☐ (loupe ✓, Esc ✓, formats ✓, recents ✓, no Screen Recording ✓; pixel sample pending one physical click) | ☐ |
 | M6 | Accessibility onboarding: deny → not enabled; grant → auto-enabled | ☑ (deny: no enable + onboarding shown; grant: features auto-start) | ☐ |
 | M7 | Vim Scroll: removed at user request | N/A (removed) | N/A |
 | M8 | Vim Scroll: removed at user request | N/A (removed) | N/A |
@@ -18,7 +18,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | M11 | Auto-close inactive in VS Code, Xcode, Terminal, password fields | ☑ (VS Code + Terminal verified; password fields by design) | ☐ |
 | M12 | Revoke Accessibility while running → ⚠️ menu warning, input not blocked; re-grant resumes without relaunch | ☑ (no freeze after fix; ⚠️ shown; typing unaffected; monitor resumes on grant) | ☐ |
 | M13 | Sleep/wake: event tap still works, timers rescheduled | ☐ | ☐ |
-| M14 | Activity Monitor: < 30 MB, ~0% CPU idle with all features on | ☑ (22–26 MB RSS, 1 feature) | ☐ |
+| M14 | Activity Monitor: < 30 MB, ~0% CPU idle with all features on | ☑ (16.8 MB RSS, 0.0% CPU with Breaks + Keep Awake + Auto-close + Snippets) | ☐ |
 | M15 | Quit: no assertions or processes left | ☑ | ☐ |
 | M16 | (F8) Notarized | N/A (internal tool, no distribution) | N/A |
 | M17 | Snippets: `;sig` in TextEdit; variables; picker; no-AX fallback | ☑ (`;sig`/`;date` ✓, `{cursor}` → `aXb` ✓, picker insert ✓; no-AX fallback pending) | ☐ |
@@ -39,6 +39,9 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | 2026-11-12 | Regression | Intel | Checkbox/button abort fixed | Numeric `CFBundleVersion`; see below |
 | 2026-11-13 | Live QA | Intel | M12 pass (auto-resume) | System prompt listed the app; enabling the switch started Auto-close + Snippets in the running app, no relaunch |
 | 2026-11-13 | Live QA | Intel | M17 pass (typing) | `(` → `()` in TextEdit after the self-service grant |
+| 2026-11-16 | Live QA | Intel | M14 pass (all features) | 16.8 MB RSS, 0.0% CPU idle; Keep Awake assertion visible in `pmset` |
+| 2026-11-16 | Live QA | Intel | M5 partial | Loupe shows, Esc cancels, formats and recents work; found and fixed the unreachable Color Picker action |
+| 2026-11-16 | Live QA | Intel | M5 bug fixed | AppKit skips the action of an item with a submenu; sampler must be retained and the app activated |
 
 ## Fixed: abort while drawing checkboxes and buttons (2026-11-12)
 

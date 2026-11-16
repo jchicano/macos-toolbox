@@ -28,6 +28,12 @@ physical keyboard.
   still decode.
 
 ### Fixed
+- Color Picker was unreachable from the menu: AppKit does not send an
+  item's action when the item has a submenu, and the `NSColorSampler` was a
+  temporary instance that could be released before its UI appeared. The
+  submenu now starts with **Pick Color…**, the sampler is retained and the
+  app is activated before presenting the loupe. Verified: the loupe shows,
+  Esc cancels without touching the clipboard, formats and recents work.
 - Crash while drawing checkboxes and push buttons (Preferences → Breaks,
   break overlay → Skip): `CFBundleVersion` was a number in Info.plist and
   the Intel graphics telemetry passes it to `CFStringGetCString`, throwing
