@@ -44,6 +44,70 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | 2026-11-16 | Live QA | Intel | M5 bug fixed | AppKit skips the action of an item with a submenu; sampler must be retained and the app activated |
 | 2026-11-16 | Live QA | Intel | M5 pass | Physical click sampled `#EEEEEE`; copied to the clipboard and added to Recent |
 
+## Pending QA gaps
+
+Everything else (M1–M12, M14, M15, M17 on Intel) is closed. What remains needs
+either a physical keyboard, a sleep cycle, or Apple Silicon hardware. None of
+these gaps blocks the internal release; they are tracked here so they are not
+silently forgotten.
+
+### M9 — Auto-close in Notes, Safari and Slack (partial)
+
+TextEdit passed in full (pairs, Tab-out, overtype, backspace). Still to check
+with a **physical keyboard**:
+
+1. Enable **Auto-close** and focus the text area of Notes, Safari (any text
+   field or `contenteditable`) and Slack (message composer).
+2. Type `(`, `[`, `{`, `"`, `'` and the Spanish `¿`/`¡`; each should produce
+   the closing character with the caret between them.
+3. Confirm the backspace behaviour: deleting an opener removes the pair, and
+   typing the closer over the auto-inserted one moves past it instead of
+   duplicating it.
+4. Confirm Tab jumps out of the pair, and that a second consecutive closer
+   does not double-insert.
+
+Why it is pending: AppleScript `keystroke` does not traverse the event tap, so
+these apps cannot be driven synthetically. Synthetic clicks are also ignored by
+the system color sampler, so M5 needed the same physical step.
+
+### M13 — Sleep/wake
+
+1. With Auto-close and Snippets enabled, put the Mac to sleep and wake it.
+2. Check that the event tap is reinstalled (`log show --predicate 'subsystem ==
+   "com.jchicano.toolbox" AND category == "eventtap"'`) and that typing still
+   expands/auto-closes.
+3. If Keep Awake or Breaks were active, check that their timers were
+   rescheduled and that the break overlay still appears.
+
+Why it is pending: it requires a real sleep/wake cycle on this machine; the
+timer rescheduling paths are unit-tested but the tap reinstall after wake is
+not.
+
+### M17 — Snippets without Accessibility (fallback)
+
+The normal path (`;sig`/`;date`, `{cursor}`, picker insert) passed. Still to
+check the degraded path:
+
+1. Revoke Accessibility for Toolbox (System Settings → Privacy & Security →
+   Accessibility).
+2. From the menu open **Snippets → Insert Snippet…**, pick `;sig`.
+3. The picker should close, copy the expanded body to the clipboard and show
+   the **"Copied — paste it yourself"** HUD instead of pasting into the
+   previously focused app.
+4. Re-grant Accessibility: the app now resumes Auto-close and Snippets in the
+   running process without a relaunch (verified for M12), so no restart is
+   needed.
+
+Why it is pending: it needs a human to flip the TCC switch; the code path is
+covered by `SnippetsFeatureTests`.
+
+### ARM (Apple Silicon) pass
+
+The `dist/Toolbox.app` build is universal (`x86_64 arm64`) but only Intel /
+macOS 12 has been exercised. On an Apple Silicon Mac, repeat at minimum M1,
+M2, M3, M5, M6, M9, M12, M14 and M15 and fill the ARM column above. Until then
+the ARM column stays `☐`.
+
 ## Fixed: abort while drawing checkboxes and buttons (2026-11-12)
 
 Symptom: the app aborted (SIGABRT) while drawing a checkbox or a push
