@@ -49,6 +49,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | 2026-11-23 | Live QA | Intel | M12 re-confirmed | After the no-AX test, enabling the switch installed the tap in the same process (pid 6454), no relaunch |
 | 2026-11-23 | Live QA | Intel | M15 re-confirmed | Quit leaves no process or power assertion; relaunch restores the tap from persisted settings |
 | 2026-11-23 | Live QA | Intel | M13 pass | Sleep 22:16:43 → wake 22:16:52: tap still delivers (`(` → `()`), Keep Awake at 59 min left, Breaks scheduled, power assertion kept |
+| 2026-11-23 | Regression | Intel | Submenu toggles fixed | Keep Awake (assertion appears/vanishes), Snippets and Breaks toggle from the Enabled entry; settings restored afterwards |
 
 ## Pending QA gaps
 
