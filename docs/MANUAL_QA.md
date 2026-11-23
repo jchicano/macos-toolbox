@@ -13,7 +13,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | M6 | Accessibility onboarding: deny → not enabled; grant → auto-enabled | ☑ (deny: no enable + onboarding shown; grant: features auto-start) | ☐ |
 | M7 | Vim Scroll: removed at user request | N/A (removed) | N/A |
 | M8 | Vim Scroll: removed at user request | N/A (removed) | N/A |
-| M9 | Auto-close: CA-4.1–4.7 in TextEdit, Notes, Slack, browser text fields | ☑ (TextEdit full pass incl. Tab-out/overtype/backspace; other apps pending) | ☐ |
+| M9 | Auto-close: CA-4.1–4.7 in TextEdit, Notes, Slack, browser text fields | ☑ (TextEdit full pass; Notes pairs + Tab-out 2026-11-23; Safari pending physical typing; Slack N/A — not installed) | ☐ |
 | M10 | Auto-close with Spanish – ISO layout | ☑ (`¿?`, quotes, backtick pair verified; dead-key ` remains pass-through by design) | ☐ |
 | M11 | Auto-close inactive in VS Code, Xcode, Terminal, password fields | ☑ (VS Code + Terminal verified; password fields by design) | ☐ |
 | M12 | Revoke Accessibility while running → ⚠️ menu warning, input not blocked; re-grant resumes without relaunch | ☑ (no freeze after fix; ⚠️ shown; typing unaffected; monitor resumes on grant) | ☐ |
@@ -44,6 +44,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | 2026-11-16 | Live QA | Intel | M5 bug fixed | AppKit skips the action of an item with a submenu; sampler must be retained and the app activated |
 | 2026-11-16 | Live QA | Intel | M5 pass | Physical click sampled `#EEEEEE`; copied to the clipboard and added to Recent |
 | 2026-11-23 | Live QA | Intel | M17 pass (no-AX fallback) | With Accessibility revoked and the app relaunched: `;sig` copied `Best`, `;date` copied `2026-11-23`, HUD shown, no paste attempt |
+| 2026-11-23 | Live QA | Intel | M9 partial (Notes) | HID helper (not AppleScript) drives the tap: `(` → `()`, `[` + Tab + `X` → `[]X`; Slack is not installed |
 
 ## Pending QA gaps
 
@@ -52,24 +53,26 @@ either a physical keyboard, a sleep cycle, or Apple Silicon hardware. None of
 these gaps blocks the internal release; they are tracked here so they are not
 silently forgotten.
 
-### M9 — Auto-close in Notes, Safari and Slack (partial)
+### M9 — Auto-close in Safari (remaining)
 
-TextEdit passed in full (pairs, Tab-out, overtype, backspace). Still to check
-with a **physical keyboard**:
+TextEdit passed in full (pairs, Tab-out, overtype, backspace) and **Notes
+passed on 2026-11-23** (`(` → `()`, `[` + Tab + `X` → `[]X`). **Slack is not
+installed** on this machine, so that app is N/A.
 
-1. Enable **Auto-close** and focus the text area of Notes, Safari (any text
-   field or `contenteditable`) and Slack (message composer).
-2. Type `(`, `[`, `{`, `"`, `'` and the Spanish `¿`/`¡`; each should produce
-   the closing character with the caret between them.
-3. Confirm the backspace behaviour: deleting an opener removes the pair, and
-   typing the closer over the auto-inserted one moves past it instead of
-   duplicating it.
-4. Confirm Tab jumps out of the pair, and that a second consecutive closer
-   does not double-insert.
+Still to check with a **physical keyboard**, in Safari:
 
-Why it is pending: AppleScript `keystroke` does not traverse the event tap, so
-these apps cannot be driven synthetically. Synthetic clicks are also ignored by
-the system color sampler, so M5 needed the same physical step.
+1. Enable **Auto-close** and open any page with a text field or a
+   `contenteditable` area (e.g. a form or a web editor).
+2. Click into the field and type `(`, `[`, `{`, `"`, `'`, `¿`, `¡`: each
+   should produce the closing character with the caret between them.
+3. Check Tab-out, overtype and pair backspace as in TextEdit.
+
+Why it is pending: **WebKit drops synthetic key events**. A HID-level helper
+(with the real keycode and Unicode payload) works in TextEdit and Notes, and a
+real synthetic click focuses the textarea (`document.activeElement` and
+`document.hasFocus()` both confirm it), but the characters never reach the
+field. AppleScript `keystroke` is dropped too. Only a physical key press can
+exercise Safari's web content.
 
 ### M13 — Sleep/wake
 

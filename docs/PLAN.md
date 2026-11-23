@@ -19,7 +19,7 @@ Cambios respecto a la versión anterior (680 líneas):
 - Firma ad-hoc; notarización pendiente de Developer ID. QA manual solo en Intel.
 
 ### Notas de QA en vivo — 2026-11-11/23 (teclado físico, Intel)
-- Tap + Auto-close + Snippets verificados con teclado real (System Events `keystroke` no atraviesa el tap: limitación del harness, no de la app).
+- Tap + Auto-close + Snippets verificados con teclado real (System Events `keystroke` no atraviesa el tap). Para automatizar sí sirve un helper que postea eventos HID con keycode + Unicode: funciona en TextEdit y **Notas** (`(` → `()`, `[` + Tab + `X` → `[]X`, 2026-11-23), pero **WebKit descarta los eventos sintéticos**: en Safari el textarea recibe el foco (`document.hasFocus()` = true) y aun así no entra ningún carácter, así que M9 en Safari requiere teclado físico.
 - Revocar el permiso congelaba el sistema (re-enable en bucle) → corregido: sin permiso se desinstala el tap y se para limpio (M12 verificado).
 - Abortos al dibujar checkboxes/botones (Preferencias, overlay Skip): causa real = `CFBundleVersion` numérico en Info.plist. La telemetría del driver Intel lo pasa a `CFStringGetCString` y lanza una excepción dentro de `dispatch_once` → aborto. Corregido a string; test `InfoPlistTests` lo protege. Reproducido 6/6 con bundle mínimo (entero) y 0/6 (string).
 - Color Picker: AppKit **no dispara la acción** de un ítem que tiene submenú, así que la lupa era inalcanzable. La acción pasa a `Pick Color…`, primera entrada del submenú. Además `NSColorSampler` debe retenerse (una instancia temporal se libera antes de mostrar la UI) y la app debe activarse antes de mostrarlo. Verificado: lupa visible, Esc cancela sin tocar el portapapeles, formatos y recientes OK, y un clic físico copió `#EEEEEE` (M5 cerrado).
