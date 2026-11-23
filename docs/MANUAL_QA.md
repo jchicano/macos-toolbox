@@ -13,7 +13,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | M6 | Accessibility onboarding: deny → not enabled; grant → auto-enabled | ☑ (deny: no enable + onboarding shown; grant: features auto-start) | ☐ |
 | M7 | Vim Scroll: removed at user request | N/A (removed) | N/A |
 | M8 | Vim Scroll: removed at user request | N/A (removed) | N/A |
-| M9 | Auto-close: CA-4.1–4.7 in TextEdit, Notes, Slack, browser text fields | ☑ (TextEdit full pass; Notes pairs + Tab-out 2026-11-23; Safari pending physical typing; Slack N/A — not installed) | ☐ |
+| M9 | Auto-close: CA-4.1–4.7 in TextEdit, Notes, Slack, browser text fields | ☑ (TextEdit full pass 2026-11-11; Notes + Safari verified 2026-11-23: pairs, Tab-out, pair backspace, overtype and Spanish `¿¡`; Slack N/A — not installed) | ☐ |
 | M10 | Auto-close with Spanish – ISO layout | ☑ (`¿?`, quotes, backtick pair verified; dead-key ` remains pass-through by design) | ☐ |
 | M11 | Auto-close inactive in VS Code, Xcode, Terminal, password fields | ☑ (VS Code + Terminal verified; password fields by design) | ☐ |
 | M12 | Revoke Accessibility while running → ⚠️ menu warning, input not blocked; re-grant resumes without relaunch | ☑ (no freeze after fix; ⚠️ shown; typing unaffected; monitor resumes on grant) | ☐ |
@@ -45,36 +45,15 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | 2026-11-16 | Live QA | Intel | M5 pass | Physical click sampled `#EEEEEE`; copied to the clipboard and added to Recent |
 | 2026-11-23 | Live QA | Intel | M17 pass (no-AX fallback) | With Accessibility revoked and the app relaunched: `;sig` copied `Best`, `;date` copied `2026-11-23`, HUD shown, no paste attempt |
 | 2026-11-23 | Live QA | Intel | M9 partial (Notes) | HID helper (not AppleScript) drives the tap: `(` → `()`, `[` + Tab + `X` → `[]X`; Slack is not installed |
+| 2026-11-23 | Live QA | Intel | M9 pass (Safari) | With Safari active and the textarea focused: `(` → `()`, `[` + Tab + `X` → `[]X`, `{` + backspace → empty, overtype `(` `)` `X` → `()X`, `'` → `''`, `¿` → `¿?`, `¡` → `¡!` |
 | 2026-11-23 | Live QA | Intel | M12 re-confirmed | After the no-AX test, enabling the switch installed the tap in the same process (pid 6454), no relaunch |
 | 2026-11-23 | Live QA | Intel | M15 re-confirmed | Quit leaves no process or power assertion; relaunch restores the tap from persisted settings |
 
 ## Pending QA gaps
 
 Everything else (M1–M12, M14, M15, M17 on Intel) is closed. What remains needs
-either a physical keyboard, a sleep cycle, or Apple Silicon hardware. None of
-these gaps blocks the internal release; they are tracked here so they are not
-silently forgotten.
-
-### M9 — Auto-close in Safari (remaining)
-
-TextEdit passed in full (pairs, Tab-out, overtype, backspace) and **Notes
-passed on 2026-11-23** (`(` → `()`, `[` + Tab + `X` → `[]X`). **Slack is not
-installed** on this machine, so that app is N/A.
-
-Still to check with a **physical keyboard**, in Safari:
-
-1. Enable **Auto-close** and open any page with a text field or a
-   `contenteditable` area (e.g. a form or a web editor).
-2. Click into the field and type `(`, `[`, `{`, `"`, `'`, `¿`, `¡`: each
-   should produce the closing character with the caret between them.
-3. Check Tab-out, overtype and pair backspace as in TextEdit.
-
-Why it is pending: **WebKit drops synthetic key events**. A HID-level helper
-(with the real keycode and Unicode payload) works in TextEdit and Notes, and a
-real synthetic click focuses the textarea (`document.activeElement` and
-`document.hasFocus()` both confirm it), but the characters never reach the
-field. AppleScript `keystroke` is dropped too. Only a physical key press can
-exercise Safari's web content.
+either a sleep cycle or Apple Silicon hardware. None of these gaps blocks the
+internal release; they are tracked here so they are not silently forgotten.
 
 ### M13 — Sleep/wake
 
