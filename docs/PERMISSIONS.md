@@ -13,13 +13,19 @@
 ## Notes for developers
 
 - The app is **not sandboxed** (global event taps are sandbox-incompatible)
-  and is distributed with Developer ID + notarization (ad-hoc until then).
+  and is ad-hoc signed, without Developer ID or notarization (internal tool,
+  M16 out of scope).
 - Rebuilding with a different signature invalidates the Accessibility grant.
-  Remove and re-add the app in
-  System Settings → Privacy & Security → Accessibility, or run:
+  The system prompt adds the app to
+  System Settings → Privacy & Security → Accessibility; enabling the switch
+  resumes Auto-close and Snippets in the running app without a relaunch. To
+  start over:
 
 ```bash
 tccutil reset Accessibility com.jchicano.toolbox
 ```
+
+  Note that `tccutil reset` is not observed by an already-running process:
+  relaunch the app after resetting it.
 
 - While another app holds Secure Input, key features go silent by design.

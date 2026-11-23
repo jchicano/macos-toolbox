@@ -39,29 +39,31 @@ make dmg         # distributable disk image (ad-hoc signed)
 ```
 
 Local builds use ad-hoc signing (`CODE_SIGN_IDENTITY=-`). On first launch,
-right-click the app → Open. The Accessibility grant is invalidated on every
-rebuild; remove and re-add the app in
-System Settings → Privacy & Security → Accessibility, or run:
+right-click the app → Open. This is an internal project: builds are **not
+notarized** and there is no Developer ID distribution, so `spctl` will reject
+the bundle as expected. The Accessibility grant is invalidated on every
+rebuild; the system prompt adds the app to
+System Settings → Privacy & Security → Accessibility, and enabling the switch
+resumes the features in the running app without a relaunch. To start over:
 
 ```bash
 tccutil reset Accessibility com.jchicano.toolbox
 ```
 
-Release signing uses a Developer ID certificate plus `notarytool`
-(see `scripts/notarize.sh`; the keychain profile is created once by the
-release owner and is never committed).
+`scripts/notarize.sh` is kept for reference but is not part of the release
+path (M16 is out of scope).
 
 ## Permissions
 
 | Permission | Used by | Notes |
 |---|---|---|
-| Accessibility | Auto-close, Snippet expansion | Requested on first toggle with an in-app guide; see `docs/PERMISSIONS.md` |
+| Accessibility | Auto-close, Snippet expansion | System prompt adds the app to the list; enabling the switch resumes features without relaunch. See `docs/PERMISSIONS.md` |
 | Notifications | Breaks | Requested when Breaks is enabled |
 | Automation | Future YAML phase only | Not used by the MVP |
 | Screen Recording | None | `NSColorSampler` does not require it |
 
-The app is distributed outside the Mac App Store without sandbox, because a
-global event tap (`CGEventTap`) cannot work in the sandbox. See
+The app runs outside the Mac App Store without sandbox, because a global
+event tap (`CGEventTap`) cannot work in the sandbox. See
 `docs/PERMISSIONS.md`.
 
 ## Limitations
@@ -77,7 +79,7 @@ global event tap (`CGEventTap`) cannot work in the sandbox. See
 App/                  UI glue (menu, features, windows)
 Packages/ToolboxCore  Pure logic, tested with `swift test`
 Config/               Info.plist, entitlements, build settings
-scripts/              universal build, DMG, notarization
+scripts/              universal build, DMG, notarization (unused)
 docs/                 PLAN.md (internal, Spanish), MANUAL_QA.md, PERMISSIONS.md
 ```
 

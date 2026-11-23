@@ -42,7 +42,7 @@ physical keyboard.
 - Revoked-permission freeze: the tap no longer re-enables itself when
   Accessibility is gone (that fight stalled system event flow). On revoke it
   uninstalls and stops features cleanly; persisted toggles and the ⚠️
-  warning stay. Re-grant + toggle (or relaunch) resumes.
+  warning stay. Re-granting resumes automatically (see Added).
 
 ### Added
 - F8 packaging: `make-dmg.sh` verified (clean DMG mounts, app only),
