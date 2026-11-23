@@ -17,7 +17,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | M10 | Auto-close with Spanish – ISO layout | ☑ (`¿?`, quotes, backtick pair verified; dead-key ` remains pass-through by design) | ☐ |
 | M11 | Auto-close inactive in VS Code, Xcode, Terminal, password fields | ☑ (VS Code + Terminal verified; password fields by design) | ☐ |
 | M12 | Revoke Accessibility while running → ⚠️ menu warning, input not blocked; re-grant resumes without relaunch | ☑ (no freeze after fix; ⚠️ shown; typing unaffected; monitor resumes on grant) | ☐ |
-| M13 | Sleep/wake: event tap still works, timers rescheduled | ☐ | ☐ |
+| M13 | Sleep/wake: event tap still works, timers rescheduled | ☑ (sleep 22:16:43 → wake 22:16:52: `(` → `()` after wake, Keep Awake at 59 min left, Breaks still scheduled, assertion kept) | ☐ |
 | M14 | Activity Monitor: < 30 MB, ~0% CPU idle with all features on | ☑ (16.8 MB RSS, 0.0% CPU with Breaks + Keep Awake + Auto-close + Snippets) | ☐ |
 | M15 | Quit: no assertions or processes left | ☑ | ☐ |
 | M16 | (F8) Notarized | N/A (internal tool, no distribution) | N/A |
@@ -48,25 +48,13 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | 2026-11-23 | Live QA | Intel | M9 pass (Safari) | With Safari active and the textarea focused: `(` → `()`, `[` + Tab + `X` → `[]X`, `{` + backspace → empty, overtype `(` `)` `X` → `()X`, `'` → `''`, `¿` → `¿?`, `¡` → `¡!` |
 | 2026-11-23 | Live QA | Intel | M12 re-confirmed | After the no-AX test, enabling the switch installed the tap in the same process (pid 6454), no relaunch |
 | 2026-11-23 | Live QA | Intel | M15 re-confirmed | Quit leaves no process or power assertion; relaunch restores the tap from persisted settings |
+| 2026-11-23 | Live QA | Intel | M13 pass | Sleep 22:16:43 → wake 22:16:52: tap still delivers (`(` → `()`), Keep Awake at 59 min left, Breaks scheduled, power assertion kept |
 
 ## Pending QA gaps
 
-Everything else (M1–M12, M14, M15, M17 on Intel) is closed. What remains needs
-either a sleep cycle or Apple Silicon hardware. None of these gaps blocks the
-internal release; they are tracked here so they are not silently forgotten.
-
-### M13 — Sleep/wake
-
-1. With Auto-close and Snippets enabled, put the Mac to sleep and wake it.
-2. Check that the event tap is reinstalled (`log show --predicate 'subsystem ==
-   "com.jchicano.toolbox" AND category == "eventtap"'`) and that typing still
-   expands/auto-closes.
-3. If Keep Awake or Breaks were active, check that their timers were
-   rescheduled and that the break overlay still appears.
-
-Why it is pending: it requires a real sleep/wake cycle on this machine; the
-timer rescheduling paths are unit-tested but the tap reinstall after wake is
-not.
+Everything else (M1–M15, M17 on Intel) is closed. Only the ARM column remains,
+which needs Apple Silicon hardware. None of these gaps blocks the internal
+release; it is tracked here so it is not silently forgotten.
 
 ### ARM (Apple Silicon) pass
 
