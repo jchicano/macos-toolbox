@@ -28,6 +28,10 @@ physical keyboard.
   still decode.
 
 ### Fixed
+- Toggle features with a submenu (Breaks, Keep Awake, Snippets) could not be
+  switched from the menu: AppKit opens the submenu and never sends the parent
+  item's action. The toggle is now the first submenu entry (**Enabled**),
+  guarded by a menu test.
 - Color Picker was unreachable from the menu: AppKit does not send an
   item's action when the item has a submenu, and the `NSColorSampler` was a
   temporary instance that could be released before its UI appeared. The

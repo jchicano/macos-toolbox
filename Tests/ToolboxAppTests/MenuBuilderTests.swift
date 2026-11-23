@@ -59,6 +59,56 @@ final class MenuBuilderTests: XCTestCase {
         XCTAssertEqual(menuAfter.items[0].state, .on)
     }
 
+    func testToggleWithSubmenuExposesEnabledItem() {
+        let store = SettingsStore(defaults: UserDefaults(suiteName: #function + UUID().uuidString)!)
+        let feature = SubmenuToggleFeature()
+        let registry = FeatureRegistry(
+            features: [feature],
+            store: store,
+            isAccessibilityGranted: { true }
+        )
+        var toggled: FeatureID?
+        let target = MenuTarget()
+        let actions = MenuActions(
+            onToggle: { toggled = $0; return .enabled },
+            onRunAction: { _ in },
+            onShowOnboarding: {},
+            onHelp: {},
+            onPreferences: {},
+            onLaunchAtLogin: { false },
+            onQuit: {}
+        )
+        let menu = MenuBuilder.build(
+            registry: registry,
+            loginItemEnabled: false,
+            missingPermission: [],
+            actions: actions,
+            target: target
+        )
+        let item = menu.items.first { ($0.representedObject as? String) == FeatureID.keepAwake.rawValue }
+        let first = item?.submenu?.items.first
+        XCTAssertEqual(first?.title, "Enabled")
+        XCTAssertEqual(first?.state, .off)
+        XCTAssertNotNil(first?.action)
+        XCTAssertTrue(first?.target === target)
+        XCTAssertEqual(first?.representedObject as? String, FeatureID.keepAwake.rawValue)
+
+        // AppKit sends this action from the submenu entry, not from the parent.
+        target.toggle(first!)
+        XCTAssertEqual(toggled, .keepAwake)
+
+        _ = registry.setEnabled(true, for: .keepAwake)
+        let rebuiltMenu = MenuBuilder.build(
+            registry: registry,
+            loginItemEnabled: false,
+            missingPermission: [],
+            actions: actions,
+            target: target
+        )
+        let rebuiltItem = rebuiltMenu.items.first { ($0.representedObject as? String) == FeatureID.keepAwake.rawValue }
+        XCTAssertEqual(rebuiltItem?.submenu?.items.first?.state, .on)
+    }
+
     func testMissingPermissionWarning() {
         // Persist an AX-gated feature while permission is missing.
         let (menu, registry) = makeMenu(granted: true)
@@ -84,5 +134,20 @@ final class MenuBuilderTests: XCTestCase {
         let enabled = FeatureCatalog.all.map(\.id).filter { registry.isEnabled($0) }
         store.update { $0.enabled = Set(enabled) }
         return store
+    }
+}
+
+/// Toggle feature with a submenu, like Keep Awake, Snippets and Breaks.
+private final class SubmenuToggleFeature: Feature {
+    static let descriptor = FeatureCatalog.descriptor(for: .keepAwake)!
+    private(set) var isRunning = false
+
+    func start() throws { isRunning = true }
+    func stop() { isRunning = false }
+
+    func makeSubmenu() -> NSMenu? {
+        let menu = NSMenu()
+        menu.addItem(withTitle: "1 h", action: nil, keyEquivalent: "")
+        return menu
     }
 }

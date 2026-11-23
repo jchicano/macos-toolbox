@@ -64,6 +64,19 @@ enum MenuBuilder {
                 item.target = target
                 item.state = registry.isEnabled(descriptor.id) ? .on : .off
                 if let submenu = registry.feature(for: descriptor.id)?.makeSubmenu() {
+                    // AppKit does not send an item's action when it has a
+                    // submenu, so the toggle lives inside as the first entry;
+                    // otherwise the feature cannot be switched from the menu.
+                    let toggle = NSMenuItem(
+                        title: NSLocalizedString("Enabled", comment: ""),
+                        action: #selector(MenuTarget.toggle(_:)),
+                        keyEquivalent: ""
+                    )
+                    toggle.target = target
+                    toggle.representedObject = descriptor.id.rawValue
+                    toggle.state = registry.isEnabled(descriptor.id) ? .on : .off
+                    submenu.insertItem(toggle, at: 0)
+                    submenu.insertItem(.separator(), at: 1)
                     menu.setSubmenu(submenu, for: item)
                 }
             case .action:
