@@ -46,6 +46,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | 2026-11-23 | Live QA | Intel | M17 pass (no-AX fallback) | With Accessibility revoked and the app relaunched: `;sig` copied `Best`, `;date` copied `2026-11-23`, HUD shown, no paste attempt |
 | 2026-11-23 | Live QA | Intel | M9 partial (Notes) | HID helper (not AppleScript) drives the tap: `(` → `()`, `[` + Tab + `X` → `[]X`; Slack is not installed |
 | 2026-11-23 | Live QA | Intel | M12 re-confirmed | After the no-AX test, enabling the switch installed the tap in the same process (pid 6454), no relaunch |
+| 2026-11-23 | Live QA | Intel | M15 re-confirmed | Quit leaves no process or power assertion; relaunch restores the tap from persisted settings |
 
 ## Pending QA gaps
 
