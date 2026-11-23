@@ -18,22 +18,23 @@ Cambios respecto a la versión anterior (680 líneas):
 - Hardened runtime desactivado en Debug (los bundles de tests no cargan con ad-hoc + runtime); activo en Release.
 - Firma ad-hoc; notarización pendiente de Developer ID. QA manual solo en Intel.
 
-### Notas de QA en vivo — 2026-11-11/12 (teclado físico, Intel)
+### Notas de QA en vivo — 2026-11-11/23 (teclado físico, Intel)
 - Tap + Auto-close + Snippets verificados con teclado real (System Events `keystroke` no atraviesa el tap: limitación del harness, no de la app).
 - Revocar el permiso congelaba el sistema (re-enable en bucle) → corregido: sin permiso se desinstala el tap y se para limpio (M12 verificado).
 - Abortos al dibujar checkboxes/botones (Preferencias, overlay Skip): causa real = `CFBundleVersion` numérico en Info.plist. La telemetría del driver Intel lo pasa a `CFStringGetCString` y lanza una excepción dentro de `dispatch_once` → aborto. Corregido a string; test `InfoPlistTests` lo protege. Reproducido 6/6 con bundle mínimo (entero) y 0/6 (string).
 - Color Picker: AppKit **no dispara la acción** de un ítem que tiene submenú, así que la lupa era inalcanzable. La acción pasa a `Pick Color…`, primera entrada del submenú. Además `NSColorSampler` debe retenerse (una instancia temporal se libera antes de mostrar la UI) y la app debe activarse antes de mostrarlo. Verificado: lupa visible, Esc cancela sin tocar el portapapeles, formatos y recientes OK, y un clic físico copió `#EEEEEE` (M5 cerrado).
+- M17 fallback sin Accesibilidad verificado (2026-11-23): con el permiso revocado y la app relanzada, `;sig` copia `Best` y `;date` copia la fecha al portapapeles y muestra el HUD «Copied — paste it yourself», sin intentar pegar. Ojo: `tccutil reset` no actualiza el estado cacheado del proceso vivo; hay que relanzar (el interruptor de Ajustes sí se observa en caliente, M12).
 
 ### Decisiones de producto — 2026-11-11 (Jay)
-- **Herramienta interna, sin distribución pública**: no se publica, no hay membresía Apple. Firma ad-hoc permanente; notarización y M16 quedan fuera de alcance (no pendientes).
-- Cada rebuild ad-hoc invalida la concesión de Accesibilidad: hay que re-añadir la app en Ajustes.
+- **Herramienta interna, sin distribución de binarios**: no hay membresía Apple, no se notariza y la firma ad-hoc es definitiva (M16 fuera de alcance). El **código fuente sí es público** en GitHub bajo licencia MIT.
+- Cada rebuild ad-hoc invalida la concesión de Accesibilidad. La app se añade sola al prompt del sistema y, al activar el interruptor, reanuda las features en el proceso vivo sin relanzar (M12 verificado).
 - **Vim Scroll eliminado** a petición del usuario (descriptor, feature, settings, prefs, tests). `FeatureID.scrollVim` se conserva como caso inerte para decodificar settings antiguos.
 
 ---
 
 ## 0. Resumen
 
-Toolbox es una app de barra de menús (sin icono en el Dock) para macOS 13 o posterior. Se distribuye como binario universal (arm64 + x86_64). Agrupa utilidades que se activan con un toggle:
+Toolbox es una app de barra de menús (sin icono en el Dock) para macOS 12.0 o posterior. Se distribuye como binario universal (arm64 + x86_64). Agrupa utilidades que se activan con un toggle:
 
 | # | Ítem del menú | Tipo | Fase |
 |---|---|---|---|
@@ -65,7 +66,7 @@ En la fase 2 (F10) se añaden módulos inspirados en SuperBar, definidos por el 
 ### No-objetivos
 - **No** es un clon de SuperBar. No se copia su código, sus assets ni su formato `.superbar.yml` literal; solo se toman ideas.
 - **No** se publica en la Mac App Store (ver §12: el sandbox no permite los event taps globales que necesitamos).
-- **No** se da soporte a macOS 12 o anterior.
+- **No** se da soporte a macOS 11 o anterior.
 - **No** hay sincronización en la nube, cuentas ni telemetría.
 - **No** se reemplaza a Vimium ni a los editores: Scroll Vim y Autocerrar son ayudas ligeras y globales, no motores de edición.
 - El MVP **no** incluye Sparkle ni autoupdate (quedan en el backlog).
@@ -115,6 +116,11 @@ En la fase 2 (F10) se añaden módulos inspirados en SuperBar, definidos por el 
 | App agente | `LSUIElement = YES` | Sin icono en el Dock, solo en la barra de menús. |
 | Sandbox | **Desactivado**. Hardened runtime **activado**. | Ver §12. |
 | Firma y notarización | Developer ID Application + `notarytool` + `stapler` | Hace falta para distribuir fuera de la App Store sin bloqueos de Gatekeeper. |
+
+> **Nota (2026-11-09):** la adaptación de entorno al inicio del documento
+> sustituye estas filas: el target real es **macOS 12.0**, el login item es
+> híbrido (`SMAppService` en 13+ y helper en 12) y la firma es **ad-hoc sin
+> notarizar** (herramienta interna, M16 fuera de alcance).
 
 ### Decisiones abiertas (máximo 3, con valor por defecto)
 1. **Icono de la barra de menús**: por defecto, el SF Symbol `wrench.and.screwdriver` como template image. Se puede cambiar más adelante por un asset propio.

@@ -21,7 +21,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | M14 | Activity Monitor: < 30 MB, ~0% CPU idle with all features on | ☑ (16.8 MB RSS, 0.0% CPU with Breaks + Keep Awake + Auto-close + Snippets) | ☐ |
 | M15 | Quit: no assertions or processes left | ☑ | ☐ |
 | M16 | (F8) Notarized | N/A (internal tool, no distribution) | N/A |
-| M17 | Snippets: `;sig` in TextEdit; variables; picker; no-AX fallback | ☑ (`;sig`/`;date` ✓, `{cursor}` → `aXb` ✓, picker insert ✓; no-AX fallback pending) | ☐ |
+| M17 | Snippets: `;sig` in TextEdit; variables; picker; no-AX fallback | ☑ (`;sig`/`;date` ✓, `{cursor}` → `aXb` ✓, picker insert ✓; no-AX fallback copies + HUD ✓) | ☐ |
 | M18 | (F10) Edit/Reload config, YAML errors, bookmarks, workspaces, run_terminal, dark mode, `include:` | ☐ | ☐ |
 
 ## Results log
@@ -43,6 +43,7 @@ This machine is Intel / macOS 12: fill the Intel column; ARM stays pending.
 | 2026-11-16 | Live QA | Intel | M5 partial | Loupe shows, Esc cancels, formats and recents work; found and fixed the unreachable Color Picker action |
 | 2026-11-16 | Live QA | Intel | M5 bug fixed | AppKit skips the action of an item with a submenu; sampler must be retained and the app activated |
 | 2026-11-16 | Live QA | Intel | M5 pass | Physical click sampled `#EEEEEE`; copied to the clipboard and added to Recent |
+| 2026-11-23 | Live QA | Intel | M17 pass (no-AX fallback) | With Accessibility revoked and the app relaunched: `;sig` copied `Best`, `;date` copied `2026-11-23`, HUD shown, no paste attempt |
 
 ## Pending QA gaps
 
@@ -82,24 +83,6 @@ the system color sampler, so M5 needed the same physical step.
 Why it is pending: it requires a real sleep/wake cycle on this machine; the
 timer rescheduling paths are unit-tested but the tap reinstall after wake is
 not.
-
-### M17 — Snippets without Accessibility (fallback)
-
-The normal path (`;sig`/`;date`, `{cursor}`, picker insert) passed. Still to
-check the degraded path:
-
-1. Revoke Accessibility for Toolbox (System Settings → Privacy & Security →
-   Accessibility).
-2. From the menu open **Snippets → Insert Snippet…**, pick `;sig`.
-3. The picker should close, copy the expanded body to the clipboard and show
-   the **"Copied — paste it yourself"** HUD instead of pasting into the
-   previously focused app.
-4. Re-grant Accessibility: the app now resumes Auto-close and Snippets in the
-   running process without a relaunch (verified for M12), so no restart is
-   needed.
-
-Why it is pending: it needs a human to flip the TCC switch; the code path is
-covered by `SnippetsFeatureTests`.
 
 ### ARM (Apple Silicon) pass
 
