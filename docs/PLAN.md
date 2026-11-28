@@ -16,7 +16,8 @@ Cambios respecto a la versión anterior (680 líneas):
 ### Adaptación de entorno — 2026-11-09 (build machine: macOS 12.7.6 Intel, Xcode 14.2)
 - **Deployment target macOS 12.0** (en lugar de 13.0): `SMAppService` no existe → login item híbrido (F1); `Localizable.strings` en vez de `.xcstrings`; `TimeInterval` en vez de `Duration`; Swift 5.7 (sin macros ni Observation).
 - Hardened runtime desactivado en Debug (los bundles de tests no cargan con ad-hoc + runtime); activo en Release.
-- Firma ad-hoc; notarización pendiente de Developer ID. QA manual solo en Intel.
+- Firma ad-hoc; notarización pendiente de Developer ID. QA manual en Intel
+  (macOS 12.7.6) y una pasada en Apple Silicon (macOS 27.2, M4 Pro, 2026-11-28).
 
 ### Notas de QA en vivo — 2026-11-11/23 (teclado físico, Intel)
 - Tap + Auto-close + Snippets verificados con teclado real (System Events `keystroke` no atraviesa el tap). Para automatizar sirve un helper que postea eventos HID con keycode + Unicode: verifica TextEdit, **Notas** y **Safari** (M9 completo, 2026-11-23) siempre que la app esté activa y el campo tenga el foco (`document.hasFocus()`); si no, los eventos no llegan. En Safari: `(` → `()`, `[` + Tab + `X` → `[]X`, `{` + backspace → vacío, overtype, `'` → `''`, `¿` → `¿?`, `¡` → `¡!`.
@@ -26,6 +27,15 @@ Cambios respecto a la versión anterior (680 líneas):
 - M17 fallback sin Accesibilidad verificado (2026-11-23): con el permiso revocado y la app relanzada, `;sig` copia `Best` y `;date` copia la fecha al portapapeles y muestra el HUD «Copied — paste it yourself», sin intentar pegar. Ojo: `tccutil reset` no actualiza el estado cacheado del proceso vivo; hay que relanzar (el interruptor de Ajustes sí se observa en caliente, M12).
 - Sleep/wake (M13, 2026-11-23): el Mac durmió a las 22:16:43 y despertó a las 22:16:52; tras despertar el tap seguía entregando eventos (`(` → `()`), Keep Awake marcaba 59 min restantes (el timer continuó) y Breaks seguía programado. La aserción de energía se mantuvo.
 - Bug detectado (2026-11-23): los **toggles con submenú** (Breaks, Keep Awake, Snippets) no se podían activar; AppKit no envía la acción del ítem padre cuando tiene submenú. El toggle pasa a la primera entrada del submenú (**Enabled**), igual que `Pick Color…`. Tests añadidos y verificado en vivo en la build reconstruida: Keep Awake (aserción on/off), Snippets y Breaks.
+
+### Pasada ARM — 2026-11-28 (macOS 27.2, Apple M4 Pro, Xcode 27.2)
+- Build universal Release OK (`x86_64 arm64`, ad-hoc + hardened runtime) y Debug arm64. 80 tests de `ToolboxCore` y 70 de la app en verde.
+- Mínimo ARM cerrado: M1, M2, M3, M5, M6, M9, M12, M14 y M15; además M10, M11 (parcial) y M17 (parcial). Detalle en `docs/MANUAL_QA.md`. La app se probó en macOS 27.2, no en macOS 12 ARM: el deployment target no cambió.
+- M3: la duración de 5 s libera la aserción y desmarca el toggle. M9/M10 con layout **Spanish**: pares, Tab-out, borrado de par, overtype, `'`/`"`, `¿?`, `¡!`, `«»` y comilla inteligente tras letra. En TextEdit hubo que desactivar la sustitución de comillas del editor para ver `'` recto; no es un fallo de la app.
+- M12: revocar con el tap activo muestra ⚠️ tras la primera tecla, no bloquea la entrada y el mismo pid (2187) reanuda al reactivar el interruptor, sin relanzar. M6: denegar deja la feature sin marcar y sin persistir; conceder la activa sola y cierra el onboarding.
+- M14: `ps` RSS en macOS 27 sale inflado (75–99 MB), pero el footprint físico tipo Activity Monitor es 13 MB recién arrancada y 24 MB tras la QA, con 0,0 % CPU y todas las features. M15: al salir no quedan proceso ni aserción; al relanzar se restauran checks y tap.
+- TCC: tras `tccutil reset` el prompt del sistema vuelve a añadir la app; si la entrada queda obsoleta, desactivar/activar el interruptor la refresca. El aviso ⚠️ puede tardar hasta la primera tecla, porque el tap se desinstala al detectar la revocación.
+- Pendiente en ARM: M4 (aviso/overlay), M9 Safari/Notes, M11 VS Code/Xcode, M13 sleep/wake, M17 picker/fallback sin AX y M18 (F10).
 
 ### Decisiones de producto — 2026-11-11 (Jay)
 - **Herramienta interna, sin distribución de binarios**: no hay membresía Apple, no se notariza y la firma ad-hoc es definitiva (M16 fuera de alcance). El **código fuente sí es público** en GitHub bajo licencia MIT.
